@@ -12,3 +12,8 @@ export type apiSignatureParams = {
   accessKey: string
   secretKey: string
 }
+
+export type ncpClientAuthKey = {
+  accessKey: string
+  secretKey: string
+}
