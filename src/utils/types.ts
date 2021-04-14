@@ -1,11 +1,11 @@
 
 
 /**
- * NcpClientAuthType
+ * NCPAuthKeyType
  * @memberof NCPClient
- * @alias NcpClientAuthType
+ * @alias NCPAuthKeyType
  */
-export type NcpClientAuthType = {
+export type NCPAuthKeyType = {
   accessKey: string
   secretKey: string
 }
@@ -28,8 +28,7 @@ export type SMSserviceAuthType = {
  export type ApiSignatureParamType = {
   method: string
   url: string
-  accessKey: string
-  secretKey: string
+  ncpAuthKey: NCPAuthKeyType
 }
 
 /**

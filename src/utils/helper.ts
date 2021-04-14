@@ -1,33 +1,26 @@
 import crypto from 'crypto'
-import { apiSignatureParams, apiSignatureType } from './types';
-
-export class Helper {
-
-  
-}
+import { ApiSignatureParamType, ApiSignatureReturnType } from './types';
 
 /**
- * 
- * NCP API Signature Constructor
- *  - doc : https://api.ncloud-docs.com/docs/en/common-ncpapi
+ * generateApiSignature
+ *  - NCP API Signature Constructor
+ *  - external API Doc : https://api.ncloud-docs.com/docs/en/common-ncpapi
  *  
  * @param {string} method - NCP API service method
  * @param {string} url - NCP API service url ( include query string )
- * @param {string} accessKey - NCP Account access key id ( from portal or Sub Account )
- * @param {string} secretKey - NCP Account secret key id ( from portal or Sub Account )
+ * @param {NCPAuthKeyType} ncpAuthKey - NCP Account access key & secret key ( from portal or Sub Account )
  * 
- * @return {apiSignatureType}
+ * @return {ApiSignatureReturnType}
  *         Caculated api signature for NCP services 
  *         Format : { Current_timestamp, Caculated_signature }
  */
 
-export function makeSignature({
+export function generateApiSignature({
   method,
   url,
-  accessKey,
-  secretKey
-}: apiSignatureParams): apiSignatureType {
-  
+  ncpAuthKey
+}: ApiSignatureParamType): ApiSignatureReturnType {
+  const { accessKey, secretKey } = ncpAuthKey
   const signParams: string[] = []
   const space = ' ';				// one space
 	const newLine = '\n';				// new line

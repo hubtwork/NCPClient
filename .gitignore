@@ -144,4 +144,7 @@ Temporary Items
 !.vscode/extensions.json
 *.code-workspace
 
+# sample testing file
+sample.ts
+
 # End of https://www.toptal.com/developers/gitignore/api/vscode,osx

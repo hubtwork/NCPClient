@@ -1,6 +1,6 @@
 import { ApiRequest, BaseURL, NCPClient } from '../utils/network_helper'
-import { NcpClientAuthType, sensSendSMSParameterType, sensSendSMSReturnType, SMSserviceAuthType } from '../utils/types'
-import { makeSignature } from '../utils/helper'
+import { NCPAuthKeyType, SendSMSParamType, SendSMSReturnType, SMSserviceAuthType } from '../utils/types'
+import { generateApiSignature } from '../utils/helper'
 import { Method } from 'axios'
 
 export class SENS {
@@ -10,13 +10,10 @@ export class SENS {
   private client: NCPClient
 
   constructor(
-    authKey: NcpClientAuthType
+    ncpAuthKey: NCPAuthKeyType
   ) {
-    this.client = new NCPClient(authKey, this.baseUrl)
+    this.client = new NCPClient(ncpAuthKey, this.baseUrl)
   }
-
-
-
 
 }
 
@@ -32,27 +29,23 @@ export class SMS {
   private smsAuth: SMSserviceAuthType
 
   constructor(
-    accountAuth: NcpClientAuthType,
+    ncpAuthKey: NCPAuthKeyType,
     smsAuth: SMSserviceAuthType
   ) {
     this.smsAuth = smsAuth
     this.baseUrl = BaseURL.sens
-    this.client = new NCPClient(accountAuth, this.baseUrl)
+    this.client = new NCPClient(ncpAuthKey, this.baseUrl)
   }
 
   public async sendSMS(
-    {
-      to,
-      content,
-      countryCode = '82'
-    }: sensSendSMSParameterType
-  ): Promise<sensSendSMSReturnType>
+    smsParam: SendSMSParamType
+  ): Promise<SendSMSReturnType>
   {
+    // construct Api Request for sendSMS service.
     const apiRequest = new APISendSMS(
-      this.client.accountAuth,
-      this.smsAuth.serviceId,
-      this.smsAuth.phone,
-      { to, content, countryCode }
+      this.client.ncpAuthKey,
+      this.smsAuth,
+      smsParam
     )
     try {
       const response = await this.client.request(apiRequest)
@@ -87,14 +80,15 @@ class APISendSMS implements ApiRequest {
   body?: { [key: string]: any } | undefined
 
   constructor(
-    accountAuth: NcpClientAuthType,
-    serviceId: string,
-    phone: string,
-    { to, content, countryCode }: sensSendSMSParameterType,
+    ncpAuthKey: NCPAuthKeyType,
+    smsAuth: SMSserviceAuthType,
+    smsParam: SendSMSParamType,
   ) {
+    const { accessKey, secretKey } = ncpAuthKey
+    const { phone, serviceId } = smsAuth
+    const { to, content, countryCode = '82' } = smsParam
     this.path = `/sms/v2/services/${serviceId}/messages`
-    const { accessKey, secretKey } = accountAuth
-    const { timestamp, signature } = makeSignature({ method: this.method, url: this.path, accessKey, secretKey })
+    const { timestamp, signature } = generateApiSignature({ method: this.method, url: this.path, ncpAuthKey })
     this.headers = {
       'Content-Type': 'application/json; charset=utf-8',
       'x-ncp-iam-access-key': accessKey,

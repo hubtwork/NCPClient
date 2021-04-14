@@ -9,3 +9,4 @@ tsconfig.json
 .git*
 .DS_Store
 assets/
+sample.ts
