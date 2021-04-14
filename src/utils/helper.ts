@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { apiSignatureParams, apiSignatureType } from './type';
+import { apiSignatureParams, apiSignatureType } from './types';
 
 export class Helper {
 
@@ -29,8 +29,8 @@ export function makeSignature({
 }: apiSignatureParams): apiSignatureType {
   
   const signParams: string[] = []
-  const space = " ";				// one space
-	const newLine = "\n";				// new line
+  const space = ' ';				// one space
+	const newLine = '\n';				// new line
 	var timestamp = Date.now().toString()			// current timestamp (epoch)
 
   var hmac = crypto.createHmac('sha256', secretKey);

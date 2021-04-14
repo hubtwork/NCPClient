@@ -30,14 +30,15 @@ describe('NCP Client', () => {
 
   test('request Test on Local', async () => {
     const apiRequest: ApiRequest = {
-      path: '/test/connection',
+      path: '/static/schools',
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
       }
     }
     const response = await ncp.request(apiRequest)
-    console.log(response)
+    console.log(response.config)
+    expect(response.status).toEqual(200)
   })
   
 })

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, Method } from 'axios'
-import { ncpClientAuthKey } from './type'
+import { NcpClientAuthType } from './types'
 
 //  sms : `https://sens.apigw.ntruss.com/sms/v2/services/${serviceId}/messages`
 //  push : `https://sens.apigw.ntruss.com/push/v2/services/${serviceId}/users`
@@ -18,15 +18,7 @@ export class NCPClient {
    * @type {string}
    * @memberof NCPClient
    */
-  public readonly accessKey: string
-
-  /**
-   * The account  key for API authentication
-   *
-   * @type {string}
-   * @memberof NCPClient
-   */
-  public readonly secretKey: string
+  public readonly accountAuth: NcpClientAuthType
 
   /**
    * The axios instance for Web Client
@@ -42,14 +34,13 @@ export class NCPClient {
    * @memberof NCPClient
    */
   constructor(
-    authKey: ncpClientAuthKey,
+    accountAuth: NcpClientAuthType,
     baseUrl: string
   ) {
-    const { accessKey, secretKey } = authKey
-    this.accessKey = accessKey
-    this.secretKey = secretKey
+    this.accountAuth = accountAuth
     this.client = axios.create({
-      baseURL: baseUrl
+      baseURL: baseUrl,
+      timeout: 2000
     })
   }
   
@@ -83,6 +74,6 @@ export enum ApiError {
 
 
 export enum BaseURL {
-  sens = 'https://sens.apigw.ntruss.com/',
+  sens = 'https://sens.apigw.ntruss.com'
 
 }
