@@ -58,7 +58,9 @@ export type SendSMSParamType = {
  * @alias SendSMSReturnType
  */
 export type SendSMSReturnType = {
-  success: boolean
-  msg:    string
+  isSuccess: boolean
   status: number
+  statusText: string
+  header?: {}
+  data?: {}
 };

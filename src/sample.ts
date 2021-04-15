@@ -17,8 +17,7 @@ let client = new SMS(
 
 const parameter: SendSMSParamType = {
   to: '01075187260',
-  content: 'test',
-  countryCode: '82'
+  content: 'test'
 }
 
 const foo = async () => {

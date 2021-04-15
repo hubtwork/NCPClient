@@ -21,7 +21,9 @@
   "homepage": "https://github.com/Hubtwork/NCPClient#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "crypto": "^1.0.1"
+    "axios-mock-adapter": "^1.19.0",
+    "crypto": "^1.0.1",
+    "jest-mock-axios": "^4.3.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.22",

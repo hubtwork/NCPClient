@@ -1,30 +1,13 @@
-import { ApiRequest, BaseURL, NCPClient } from '../utils/network_helper'
-import { NCPAuthKeyType, SendSMSParamType, SendSMSReturnType, SMSserviceAuthType } from '../utils/types'
-import { generateApiSignature } from '../utils/helper'
-import { Method } from 'axios'
+import { Method } from "axios"
+import { generateApiSignature } from "../../utils/helper"
+import { ApiRequest, BaseURL, NCPClient } from "../../utils/network_helper"
+import { NCPAuthKeyType, SendSMSParamType, SendSMSReturnType, SMSserviceAuthType } from "../../utils/types"
+import { MockNCPClient } from "./mock_ncpclient"
 
-export class SENS {
-  
-  private baseUrl: string = BaseURL.sens
-
-  private client: NCPClient
-
-  constructor(
-    ncpAuthKey: NCPAuthKeyType
-  ) {
-    this.client = new NCPClient(ncpAuthKey, this.baseUrl)
-  }
-
-}
-
-export class Project {
-  
-}
-
-export class SMS {
+export class MockSMS {
 
   private baseUrl: string
-  private client: NCPClient
+  private client: MockNCPClient
   
   private smsAuth: SMSserviceAuthType
 
@@ -34,7 +17,7 @@ export class SMS {
   ) {
     this.smsAuth = smsAuth
     this.baseUrl = BaseURL.sens
-    this.client = new NCPClient(ncpAuthKey, this.baseUrl)
+    this.client = new MockNCPClient(ncpAuthKey, this.baseUrl)
   }
 
   public async sendSMS(
@@ -49,8 +32,8 @@ export class SMS {
     )
     try {
       const response = await this.client.request(apiRequest)
-      console.log(response)
       if (response.status === 202) {
+        console.log(response)
         return {
           isSuccess: true,  
           status: response.status,
@@ -65,6 +48,7 @@ export class SMS {
         }
       }
     } catch (error) {
+      console.log(error)
       return {
         isSuccess: false,
         status: error.response.status || 500,
