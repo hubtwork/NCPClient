@@ -1,5 +1,4 @@
 
-
 /**
  * NCPAuthKeyType
  * @memberof NCPClient
@@ -58,9 +57,9 @@ export type SendSMSParamType = {
  * @alias SendSMSReturnType
  */
 export type SendSMSReturnType = {
-  isSuccess: boolean
-  status: number
+  isSuccess:  boolean
+  status:     number
   statusText: string
-  header?: {}
-  data?: {}
+  header?:    {}
+  data?:      {}
 };

@@ -9,7 +9,21 @@ export class SMS {
   private client: NCPClient
   
   private smsAuth: SMSserviceAuthType
-
+  
+  /**
+   * 
+   * Construct SMS Service Manager
+   * 
+   * @template {NCPAuthKeyType} NCPAuthKeyType - NCP API Authentication Key Pair
+   * @param {string} accessKey Access Key ID
+   * @param {string} secretKey Secret Key
+   * 
+   * @template {SMSserviceAuthType} SMSserviceAuthType - NCP SMS Service Required Key Pair
+   * @param {string} phone Registered Caller ID ( Phone Number )
+   * @param {string} serviceId OPEN API serviceId
+   * 
+   * @memberof SMS
+   */
   constructor(
     ncpAuthKey: NCPAuthKeyType,
     smsAuth: SMSserviceAuthType
@@ -19,6 +33,24 @@ export class SMS {
     this.client = new NCPClient(ncpAuthKey, this.baseUrl)
   }
 
+
+  /**
+   * 
+   * Service - Send SMS message
+   * 
+   * @template {SendSMSParamType} SendSMSParamType - NCP SMS Service Message 
+   * @param {string} to Recipient's phone number
+   * @param {string} content Message content to send
+   * @param {?string} countryCode Recipient's country code (default 82)
+   * 
+   * @template {SendSMSReturnType} SendSMSReturnType - NCP SMS Service responses
+   * @returns {boolean} isSuccess Check if request is successful
+   * @returns {number} status Http status code from response
+   * @returns {string} statusText Http status text from response 
+   * @returns {?jsonObject} data Data from response ( If request is successful )
+   * 
+   * @memberof SMS
+   */
   public async sendSMS(
     smsParam: SendSMSParamType
   ): Promise<SendSMSReturnType>
@@ -37,6 +69,7 @@ export class SMS {
           isSuccess: true,  
           status: response.status,
           statusText: response.statusText,
+          header: response.headers,
           data: response.data
         }
       } else {
