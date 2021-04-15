@@ -3,7 +3,7 @@ coverage
 .vscode
 .travis.yml
 LICENSE
-test/
+__test__
 tsconfig.json
 .idea
 .git*
