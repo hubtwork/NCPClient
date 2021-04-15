@@ -63,9 +63,9 @@ var smsService = new ncpclient.SMS(
 ~~~javascript
 // type your SMS send parameter ( countryCode is optional )
 const sendSMSparam = {
-  	to: 'recipient phoneNumber',
-		content: 'message to send',
-  	countryCode: '82'
+    to: 'recipient phoneNumber',
+    content: 'message to send',
+    countryCode: '82'
 }
 
 async function sendMessage() {
