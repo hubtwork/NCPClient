@@ -7,6 +7,7 @@ An easy-to-use typescript wrapper for [Naver Cloud Platform API](https://api.ncl
 
 ## Table of Contents
 
+- [Dependency](#dependency)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Types](#types)
@@ -15,6 +16,13 @@ An easy-to-use typescript wrapper for [Naver Cloud Platform API](https://api.ncl
 
 - [Credit](#credit)
 - [License](#license)
+
+
+
+## Dependency
+
+- axios
+- crypto
 
 
 
@@ -96,11 +104,11 @@ type NCPAuthKeyType = {
 ~~~typescript
 type SendSMSParamType = {
   // `to` is recipient's phone number
-  to:           '01011112345'
+  to:           string
   // `content` is text content what you want to send
-  content:      'say hi for users'
+  content:      string
   // `countryCode` is recipient's country code but 
-  countryCode?: '82'
+  countryCode?: string
 }
 
 type SendSMSReturnType = {
