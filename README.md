@@ -3,7 +3,7 @@
 
 An easy-to-use typescript wrapper for [Naver Cloud Platform API](https://api.ncloud-docs.com/docs/en/common-ncpapi). With VersionUps, API wrappers will be added and updates.
 
-**Notice ) ** Always welcome contributions for user's Productivity
+**Notice )** Always welcome contributions for user's Productivity
 
 ## Table of Contents
 
