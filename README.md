@@ -1,5 +1,5 @@
 # NCP-Client
-[![npm version](https://img.shields.io/npm/v/ncp-client.svg?style=flat-square)](https://www.npmjs.org/package/ncp-client)![travisici](https://travis-ci.com/Hubtwork/NCPClient.svg?branch=master)[![install size](https://packagephobia.com/badge?p=ncp-client)](https://packagephobia.com/result?p=ncp-client)[![npm downloads](https://img.shields.io/npm/dm/ncp-client.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ncp-client)
+[![npm version](https://img.shields.io/npm/v/ncp-client.svg?style=flat-square)](https://www.npmjs.org/package/ncp-client) ![travisici](https://travis-ci.com/Hubtwork/NCPClient.svg?branch=master) [![install size](https://packagephobia.com/badge?p=ncp-client)](https://packagephobia.com/result?p=ncp-client) [![npm downloads](https://img.shields.io/npm/dm/ncp-client.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ncp-client)
 
 An easy-to-use typescript wrapper for [Naver Cloud Platform API](https://api.ncloud-docs.com/docs/en/common-ncpapi). With VersionUps, API wrappers will be added and updates.
 
