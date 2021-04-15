@@ -1,1 +1,1 @@
-export { SMS } from './clients/sens'
+module.exports = require('./ncpclient.ts')
