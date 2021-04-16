@@ -42,6 +42,9 @@ export type SMSserviceAuthType = {
 
 /**
  * SendSMSParamType
+ * 
+ * 2021. 4. 15 Changes
+ * 
  * @memberof SMS
  * @alias SendSMSParamType
  */
@@ -53,13 +56,16 @@ export type SendSMSParamType = {
 
 /**
  * SendSMSReturnType
+ * 
+ * 2021. 4. 15 Changes
+ * 
  * @memberof SMS
  * @alias SendSMSReturnType
  */
 export type SendSMSReturnType = {
-  isSuccess:  boolean
-  status:     number
-  statusText: string
-  header?:    {}
-  data?:      {}
+  isSuccess:    boolean
+  status:       number
+  statusText:   string
+  requestId?:   string
+  requestTime?: string
 };

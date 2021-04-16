@@ -63,14 +63,13 @@ export class SMS {
     )
     try {
       const response = await this.client.request(apiRequest)
-      console.log(response)
       if (response.status === 202) {
         return {
           isSuccess: true,  
           status: response.status,
           statusText: response.statusText,
-          header: response.headers,
-          data: response.data
+          requestId: response.data.requestId,
+          requestTime: response.data.requestTime
         }
       } else {
         return {
@@ -111,16 +110,22 @@ class APISendSMS implements ApiRequest {
       'x-ncp-apigw-timestamp': timestamp,
       'x-ncp-apigw-signature-v2': signature,
     }
+    // construct recipient list
+    /*
+    const recipients: {}[] = []
+    for (var recipient of to) {
+      recipients.push({'to': recipient,})
+    }
+    */
     this.body = {
       'type': 'SMS',
       'contentType': 'COMM',
       'countryCode': countryCode,
       'from': phone,
       'content': content,
-      'messages': [
-        {
-          'to': to,
-        },
+      'messages': [{
+        to: to,
+      },
       ],
     }
   }
