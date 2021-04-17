@@ -1,16 +1,64 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
+import { resolve } from 'node:path'
+import { NCPAuthKeyType } from './types'
 
-interface ApiRequest {
+export class ApiClient {
+  
+  public readonly ncpAuthKey: NCPAuthKeyType
+
+  private client: AxiosInstance
+
+  constructor(
+    ncpAuthKey: NCPAuthKeyType,
+    baseURL: string,
+    timeout: number = 2000
+  )
+  {
+    this.ncpAuthKey = ncpAuthKey
+    this.client = axios.create({
+      baseURL: baseURL,
+      timeout: timeout,
+      
+    })
+  }
+
+  public async request<T>(apiRequest: ApiRequest): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+        urlRequest(this.client, apiRequest)
+          .then((response: any) => {
+            console.log(typeof response.data)
+            resolve(response.data as T)
+          })
+          .catch((error) => {
+            if (error.response) {
+              reject(new ApiError(ApiErrorEnum["httpStatusCode"], error.response.status))
+            } else if (error.request) {
+              console.log(error.request)
+              reject(error)
+            } else {
+              console.log('Error', error.message)
+              reject(error)
+            }
+          })
+    })
+  }
+}
+
+type FailedRequest = {
+  
+}
+
+export interface ApiRequest {
   path:     string
   method:   Method
-  headers:  { [key: string]: string }
+  headers: { [key: string]: string }
   body?:     { [key: string]: any }
 }
 
-async function urlRequest(client: AxiosInstance, apiRequest: ApiRequest) : Promise<AxiosResponse> {
+function urlRequest(client: AxiosInstance, apiRequest: ApiRequest) : Promise<AxiosResponse> {
   const { path, method, headers, body } = apiRequest
   // url validation
-  if (!validateURL(client.defaults.baseURL + apiRequest.path)) throw new ApiError(ApiErrorEnum["invalidURL"])
+  //if (!validateURL(client.defaults.baseURL + apiRequest.path)) throw new ApiError(ApiErrorEnum["invalidURL"])
   return client.request({
     url: path,
     method: method,
@@ -19,9 +67,13 @@ async function urlRequest(client: AxiosInstance, apiRequest: ApiRequest) : Promi
   })
 }
 
+function request() {
+
+}
+
 enum ApiErrorEnum {
   invalidURL = 'Invalid URL',
-  httpStatusCode = `Unexpected HTTP Status Code : `,
+  httpStatusCode = `Unexpected HTTP Status Code :`,
   unexpectedResponse = 'Unexpected response from the server'
 }
 
