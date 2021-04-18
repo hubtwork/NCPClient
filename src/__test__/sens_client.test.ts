@@ -48,7 +48,8 @@ describe('SMS client test', () => {
     expect(response.isSuccess).toBe(true)
     expect(response.status).toBe(202)
     expect(response.statusText).toBe('Accepted')
-    expect(response.data !== undefined).toBe(true)
+    expect(response.requestId !== undefined).toBe(true)
+    expect(response.requestTime !== undefined).toBe(true)
   })
 
   test('Unauthorized NCP auth key. Not Allowed User.', async () => {
@@ -71,7 +72,8 @@ describe('SMS client test', () => {
     expect(response.isSuccess).toBe(false)
     expect(response.status).toBe(401)
     expect(response.statusText).toBe('Unauthorized')
-    expect(response.data === undefined).toBe(true)
+    expect(response.requestId === undefined).toBe(true)
+    expect(response.requestTime === undefined).toBe(true)
   })
 
   test('Incorrect Phone Number. No phone number pairing with given serviceId', async () => {
@@ -94,7 +96,8 @@ describe('SMS client test', () => {
     expect(response.isSuccess).toBe(false)
     expect(response.status).toBe(404)
     expect(response.statusText).toBe('Not Found')
-    expect(response.data === undefined).toBe(true)
+    expect(response.requestId === undefined).toBe(true)
+    expect(response.requestTime === undefined).toBe(true)
   })
     
   test('Incorrect ServiceId. Given serviceId is not enrolled.', async () => {
@@ -118,6 +121,7 @@ describe('SMS client test', () => {
     expect(response.isSuccess).toBe(false)
     expect(response.status).toBe(403)
     expect(response.statusText).toBe('Forbidden')
-    expect(response.data === undefined).toBe(true)
+    expect(response.requestId === undefined).toBe(true)
+    expect(response.requestTime === undefined).toBe(true)
   })
 })

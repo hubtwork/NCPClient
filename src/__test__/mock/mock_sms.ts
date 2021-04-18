@@ -38,7 +38,8 @@ export class MockSMS {
           isSuccess: true,  
           status: response.status,
           statusText: response.statusText,
-          data: response.data
+          requestId: response.data.requestId,
+          requestTime: response.data.requestTime
         }
       } else {
         return {

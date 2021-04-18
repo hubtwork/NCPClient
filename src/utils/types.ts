@@ -9,6 +9,12 @@ export type NCPAuthKeyType = {
   secretKey: string
 }
 
+export type ApiClientResponse = {
+  isSuccess: boolean
+  data?: {},
+  errorMessage?: {}
+}
+
 /**
  * SMSserviceAuthType
  * @memberof SMS
