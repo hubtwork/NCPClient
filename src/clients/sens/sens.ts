@@ -2,7 +2,7 @@ import { generateApiSignature } from '../../utils/helper'
 import { Method } from 'axios'
 import { ApiClient, ApiRequest } from '../../utils/api_request'
 import { SendSMSParamType } from '../../types/param_types'
-import { ApiClientResponse, SendSMSReturnType } from '../../types/return_types'
+import { ApiClientResponse, SearchMessageRequestReturnType, SearchMessageResulReturnType, SendSMSReturnType } from '../../types/return_types'
 import { BaseURL } from '../../shared/baseurl'
 import { NCPAuthKeyType, SMSserviceAuthType } from '../../types/auth_types'
 
@@ -113,6 +113,46 @@ class SMS {
       body: body
     }
     return this.client.request<SendSMSReturnType>(apiRequest)
+  }
+
+  public async searchMessageRequest(requestId: string): Promise<ApiClientResponse<SearchMessageRequestReturnType>> {
+    // construct path and method
+    const path = `/sms/v2/services/${this.smsAuth.serviceId}/messages?requestId=${requestId}`
+    const method: Method = 'GET'
+    // construct signature and headers
+    const { timestamp, signature } = generateApiSignature({ method: method, url: path, ncpAuthKey: this.ncpAuthKey })
+    const headers = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'x-ncp-iam-access-key': this.ncpAuthKey.accessKey,
+      'x-ncp-apigw-timestamp': timestamp,
+      'x-ncp-apigw-signature-v2': signature,
+    }
+    const apiRequest: ApiRequest = {
+      path: path,
+      method: method,
+      headers: headers
+    }
+    return this.client.request<SearchMessageRequestReturnType>(apiRequest)
+  }
+
+  public async searchMessageResult(messageId: string): Promise<ApiClientResponse<SearchMessageResulReturnType>> {
+    // construct path and method
+    const path = `/sms/v2/services/${this.smsAuth.serviceId}/messages/${messageId}`
+    const method: Method = 'GET'
+    // construct signature and headers
+    const { timestamp, signature } = generateApiSignature({ method: method, url: path, ncpAuthKey: this.ncpAuthKey })
+    const headers = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'x-ncp-iam-access-key': this.ncpAuthKey.accessKey,
+      'x-ncp-apigw-timestamp': timestamp,
+      'x-ncp-apigw-signature-v2': signature,
+    }
+    const apiRequest: ApiRequest = {
+      path: path,
+      method: method,
+      headers: headers
+    }
+    return this.client.request<SearchMessageResulReturnType>(apiRequest)
   }
 }
 
