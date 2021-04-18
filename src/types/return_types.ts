@@ -8,8 +8,7 @@
  * @alias SendSMSReturnType
  */
  export type SendSMSReturnType = {
-  isSuccess:    boolean
-  status:       number
+  statusCode:   string
   statusText:   string
   requestId?:   string
   requestTime?: string

@@ -73,9 +73,7 @@ export class MockApiClient {
    * @returns 
    */
   private validateURL(url: string): boolean {
-    // Considering localhost for test environment
-    if (url.match(/^https?:\/\/\w+(\.\w+)*(:[0-9]+)?(\/.*)?$/) !== null) return true
-    var res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)
+    var res = url.match(/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/)
     return (res !== null)
   }
 }

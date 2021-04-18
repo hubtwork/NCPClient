@@ -2,23 +2,18 @@ const axios = require('axios')
 import { MockApiClient, ApiRequest } from './mock/mock_apiClient'
 import { ApiClientResponse, NCPAuthKeyType } from '../utils/types';
 
-let ncpAuthKey: NCPAuthKeyType = {
-  accessKey: 'GCk1oT4Yu0SiByPg5rRN',
-  secretKey: 'byszL5gtgauX6yRj4DCGHouGFp0HAH6atyQrDM50'
-}
-
 type testDataType = {
   name: string
 }
 
 jest.mock("axios")
 
-describe('61713112', () => {
+describe('ApiClient TestSuite', () => {
   let client: MockApiClient
   let ncpAuthKey: NCPAuthKeyType
 
   beforeAll(() => {
-    ncpAuthKey = {
+    const ncpAuthKey = {
       accessKey: "accessKey",
       secretKey: "secretKey"
     }
@@ -27,7 +22,7 @@ describe('61713112', () => {
 
   beforeEach(() => axios.mockClear())
 
-  test('create NCPClient', () => {
+  test('create ApiClient', () => {
     expect(
       () =>
       new MockApiClient( ncpAuthKey, 'http://api.test.com', 2000 )
@@ -55,7 +50,6 @@ describe('61713112', () => {
     const response = await client.request<testDataType>(apiRequest)
     expect(response.isSuccess).toEqual(true)
     if (response.data) {
-      console.log('data detected')
       const data: testDataType = response.data || undefined
       expect(data !== undefined).toEqual(true)
       expect(data.name).toEqual('hubtwork')
@@ -83,7 +77,6 @@ describe('61713112', () => {
       }
     }
     const response = await client.request<testDataType>(apiRequest)
-    console.log(response)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 404')
   })
@@ -105,7 +98,6 @@ describe('61713112', () => {
       }
     }
     const response = await client.request<testDataType>(apiRequest)
-    console.log(response)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('No response from the server')
   })
@@ -126,7 +118,6 @@ describe('61713112', () => {
       }
     }
     const response = await client.request<testDataType>(apiRequest)
-    console.log(response)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Error occured during setup request')
   })

@@ -1,29 +1,14 @@
-import { ApiRequest, BaseURL, NCPClient } from '../utils/network_helper'
-import { ApiClientResponse, NCPAuthKeyType, SMSserviceAuthType } from '../utils/types'
-import { generateApiSignature } from '../utils/helper'
-import { Method } from 'axios'
-import { ApiClient } from '../utils/api_request'
-import { SendSMSParamType } from '../types/param_types'
-import { SendSMSReturnType } from '../types/return_types'
+import { Method } from "axios"
+import { SendSMSParamType } from "../../types/param_types"
+import { SendSMSReturnType } from "../../types/return_types"
+import { generateApiSignature } from "../../utils/helper"
+import { NCPAuthKeyType, SMSserviceAuthType, ApiClientResponse } from "../../utils/types"
+import { ApiRequest, MockApiClient } from "./mock_apiClient"
 
-export class SENS {
-  
-  private baseUrl: string = BaseURL.sens
 
-  private client: ApiClient
+export class MockSMS {
 
-  constructor(
-    ncpAuthKey: NCPAuthKeyType
-  ) {
-    this.client = new ApiClient(ncpAuthKey, this.baseUrl)
-  }
-
-}
-
-export class SMS {
-
-  
-  private client: ApiClient
+  private client: MockApiClient
   
   private ncpAuthKey: NCPAuthKeyType
   private smsAuth: SMSserviceAuthType
@@ -35,8 +20,7 @@ export class SMS {
   ) {
     this.smsAuth = smsAuth
     this.ncpAuthKey = ncpAuthKey
-    this.client = new ApiClient(ncpAuthKey, baseUrl)
-    
+    this.client = new MockApiClient(ncpAuthKey, baseUrl)
   }
 
   public async sendSMS(smsParam: SendSMSParamType | SendSMSParamType[], countryCode?: number): Promise<ApiClientResponse<SendSMSReturnType>> {
@@ -69,9 +53,4 @@ export class SMS {
     }
     return this.client.request<SendSMSReturnType>(apiRequest)
   }
-}
-
-
-export class Project {
-  
 }

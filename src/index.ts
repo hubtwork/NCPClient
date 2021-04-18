@@ -1,1 +1,1 @@
-export { SMS } from './clients/sens/sms_client'
+export { SMS } from './clients/sens/sens'
