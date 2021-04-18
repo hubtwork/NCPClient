@@ -41,10 +41,10 @@ $ npm install ncp-client
 #### Import API Wrapper
 
 ~~~javascript
-var ncpclient = require('ncp-client')
+var { SENS } = require('ncp-client')
 ~~~
 
-#### (SENS) SMS API
+#### [ SENS ] SMS API
 
 - **Common**
 
@@ -59,47 +59,68 @@ const smsAuthKey = {
     phone: 'phoneNumber',
     serviceId: 'serviceId'
 }
-// create smsService with parameters
-var smsService = new ncpclient.SMS(
-    ncpAuthKey,
-    smsAuthKey
-)
+// create SENS api container and get smsService agent.
+const sens = new SENS()
+const smsService = sens.smsService(ncpAuthKey, smsAuthKey)
 ~~~
 
 - **SMS Send**
 
 ~~~javascript
-// type your SMS send parameter ( countryCode is optional )
+// type your SMS send parameter 
 const sendSMSparam = {
     to: 'recipient phoneNumber',
-    content: 'message to send',
-    countryCode: '82'
+    content: 'message to send'
 }
+// to send to multiple people 
+const multipleSMSparam = [
+  { to: 'r1', content: 'c1'},
+  { to: 'r2', content: 'c2'},
+  { to: 'r3', content: 'c3'}
+]
 
 async function sendMessage() {
-    const {isSuccess, status, statusText, header, data} = await cs.sendSMS( sendSMSparam )
-    // do something with response
+  	// if you don't pass countryCode, default countryCode is 82.
+    const {isSuccess, data, errorMessage } = await smsService.sendSMS( sendSMSparam, countryCode )
+    // write something after async function
+    if (isSuccess) {
+        // do something with data
+    } else {
+        // handle with errorMessage
+    }
 }
 
 ~~~
 
 
 
-## Types
+## Types 
+
+**Note)** Introduced types are what you have to create or handle in use *NCP-Client*
 
 Based on Typescript's type alias, several types for api are declared. At this step, you can only show what you will use at each usage.
 
-**NCP Account**
+**Common**
 
 ~~~typescript
+// NCP api authentication key
 type NCPAuthKeyType = {
   // `accessKey` and `secretKey` are access key of 
   accessKey: string
   secretKey: string
 }
+
+// Common return value for all NCP api request
+type ApiClientResponse<T> = {
+  isSuccess: boolean
+  // If success, handle with it
+  data?: T
+  // If failed, handle with it
+  errorMessage?: {}
+}
 ~~~
 
-**SMS Send**
+**Send SMS**
 
 ~~~typescript
 type SendSMSParamType = {
@@ -107,19 +128,15 @@ type SendSMSParamType = {
   to:           string
   // `content` is text content what you want to send
   content:      string
-  // `countryCode` is recipient's country code but 
-  countryCode?: string
 }
 
 type SendSMSReturnType = {
-  // `isSuccess` is boolean value that let you know if your request has been successful
-  isSuccess:  boolean
-  // `status` and `statusText` are the HTTP status code / message from the server response
-  status:     number
+  // `statusCode` and `statusText` are the HTTP status code / message from the server response
+  statusCode: string
   statusText: string
-  // `header` and `data` are the header / body from the server response ( Only for seccessful Request )
-  header?:    {}
-  data?:      {}
+  // `requestId` represents current succesful request's key, `requestTime` represents Datetime string
+  requestId:   string
+  requestTime: string
 }
 ~~~
 

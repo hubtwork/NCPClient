@@ -4,10 +4,10 @@
  * @memberof NCPClient
  * @alias NCPAuthKeyType
  */
-export type NCPAuthKeyType = {
+ export type NCPAuthKeyType = {
   accessKey: string
   secretKey: string
-}
+ }
 
 /**
  * SMSserviceAuthType
@@ -21,7 +21,7 @@ export type SMSserviceAuthType = {
 
 /**
  * ApiSignatureParamType
- * @memberof SMS
+ * @memberof generateApiSignature
  * @alias ApiSignatureParamType
  */
  export type ApiSignatureParamType = {
@@ -32,7 +32,7 @@ export type SMSserviceAuthType = {
 
 /**
  * ApiSignatureReturnType
- * @memberof SMS
+ * @memberof generateApiSignature
  * @alias ApiSignatureReturnType
  */
  export type ApiSignatureReturnType = {
@@ -40,26 +40,3 @@ export type SMSserviceAuthType = {
   signature: string
 }
 
-/**
- * SendSMSParamType
- * @memberof SMS
- * @alias SendSMSParamType
- */
-export type SendSMSParamType = {
-  to:           string
-  content:      string
-  countryCode?: string
-}
-
-/**
- * SendSMSReturnType
- * @memberof SMS
- * @alias SendSMSReturnType
- */
-export type SendSMSReturnType = {
-  isSuccess:  boolean
-  status:     number
-  statusText: string
-  header?:    {}
-  data?:      {}
-};
