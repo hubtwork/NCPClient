@@ -1,9 +1,9 @@
 const axios = require('axios')
 import { ApiRequest } from './mock/mock_apiClient'
-import { NCPAuthKeyType, SMSserviceAuthType } from '../utils/types';
 import { MockSMS } from './mock/mock_smsClient';
 import { SendSMSParamType } from '../types/param_types';
 import { SendSMSReturnType } from '../types/return_types';
+import { NCPAuthKeyType, SMSserviceAuthType } from '../types/auth_types';
 
 jest.mock('axios')
 

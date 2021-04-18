@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { ApiSignatureParamType, ApiSignatureReturnType } from './types';
+import { ApiSignatureParamType, ApiSignatureReturnType } from '../types/auth_types';
 
 /**
  * generateApiSignature

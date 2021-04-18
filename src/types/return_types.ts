@@ -1,4 +1,17 @@
 
+
+/**
+ * ApiClientResponse
+ * @template T Data extracted from successful response
+ * @memberof ApiClient
+ * @alias ApiClientResponse
+ */
+export type ApiClientResponse<T> = {
+  isSuccess: boolean
+  data?: T
+  errorMessage?: {}
+}
+
 /**
  * SendSMSReturnType
  * 
