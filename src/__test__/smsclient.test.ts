@@ -1,5 +1,4 @@
 const axios = require('axios')
-import { ApiRequest } from './mock/mock_apiClient'
 import { MockSMS } from './mock/mock_smsClient';
 import { SendSMSParamType } from '../types/param_types';
 import { SendSMSReturnType } from '../types/return_types';

@@ -23,6 +23,6 @@ export type ApiClientResponse<T> = {
  export type SendSMSReturnType = {
   statusCode:   string
   statusText:   string
-  requestId?:   string
-  requestTime?: string
-};
+  requestId:   string
+  requestTime: string
+}

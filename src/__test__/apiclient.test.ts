@@ -1,6 +1,6 @@
 const axios = require('axios')
+import { NCPAuthKeyType } from '../types/auth_types'
 import { MockApiClient, ApiRequest } from './mock/mock_apiClient'
-import { ApiClientResponse, NCPAuthKeyType } from '../utils/types';
 
 type testDataType = {
   name: string
