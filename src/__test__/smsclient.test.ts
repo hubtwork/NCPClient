@@ -25,7 +25,7 @@ const smsMultiParam: SendSMSParamType[] = [
     content: 'test double'
   }]
 
-describe('ApiClient TestSuite', () => {
+describe('SmsClient TestSuite', () => {
   let client: MockSMS
   let ncpAuthKey = <NCPAuthKeyType>{
     accessKey: "accessKey",

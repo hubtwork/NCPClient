@@ -1,5 +1,6 @@
-import axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
-import { ApiClientResponse, NCPAuthKeyType } from '../../utils/types'
+import axios, { AxiosResponse, Method } from 'axios'
+import { NCPAuthKeyType } from '../../types/auth_types'
+import { ApiClientResponse } from '../../types/return_types'
 
 export class MockApiClient {
   

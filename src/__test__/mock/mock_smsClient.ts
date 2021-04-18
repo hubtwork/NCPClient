@@ -1,8 +1,8 @@
 import { Method } from "axios"
+import { NCPAuthKeyType, SMSserviceAuthType } from "../../types/auth_types"
 import { SendSMSParamType } from "../../types/param_types"
-import { SendSMSReturnType } from "../../types/return_types"
+import { ApiClientResponse, SendSMSReturnType } from "../../types/return_types"
 import { generateApiSignature } from "../../utils/helper"
-import { NCPAuthKeyType, SMSserviceAuthType, ApiClientResponse } from "../../utils/types"
 import { ApiRequest, MockApiClient } from "./mock_apiClient"
 
 
