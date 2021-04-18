@@ -1,11 +1,12 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
-import { ApiClientResponse, NCPAuthKeyType } from './types'
+import { ApiClientResponse, NCPAuthKeyType } from '../../utils/types'
 
-export class ApiClient {
+export class MockApiClient {
   
   public readonly ncpAuthKey: NCPAuthKeyType
 
-  private client: AxiosInstance
+  private baseURL: string
+  private timeout: number
 
   constructor(
     ncpAuthKey: NCPAuthKeyType,
@@ -14,10 +15,8 @@ export class ApiClient {
   )
   {
     this.ncpAuthKey = ncpAuthKey
-    this.client = axios.create({
-      baseURL: baseURL,
-      timeout: timeout,
-    })
+    this.baseURL = baseURL
+    this.timeout = timeout
   }
 
   public async request<T>(apiRequest: ApiRequest): Promise<ApiClientResponse<T>> {
@@ -56,8 +55,11 @@ export class ApiClient {
   private urlRequest(apiRequest: ApiRequest) : Promise<AxiosResponse> {
     const { path, method, headers, body } = apiRequest
     // url validation
-    if (!this.validateURL(this.client.defaults.baseURL + apiRequest.path)) throw new ApiError(ApiErrorEnum["invalidURL"])
-    return this.client.request({
+    if (!this.validateURL(this.baseURL + apiRequest.path)) throw new ApiError(ApiErrorEnum["invalidURL"])
+    return axios({
+      baseURL: this.baseURL,
+      timeout: this.timeout,
+      
       url: path,
       method: method,
       headers: headers,

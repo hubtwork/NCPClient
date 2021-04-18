@@ -1,7 +1,9 @@
 import { Method } from "axios"
+import { SendSMSParamType } from "../../types/param_types"
+import { SendSMSReturnType } from "../../types/return_types"
 import { generateApiSignature } from "../../utils/helper"
 import { NCPClient, BaseURL, ApiRequest } from "../../utils/network_helper"
-import { SMSserviceAuthType, NCPAuthKeyType, SendSMSParamType, SendSMSReturnType } from "../../utils/types"
+import { SMSserviceAuthType, NCPAuthKeyType } from "../../utils/types"
 
 export class SMS {
 
@@ -101,7 +103,8 @@ class APISendSMS implements ApiRequest {
   ) {
     const { accessKey, secretKey } = ncpAuthKey
     const { phone, serviceId } = smsAuth
-    const { to, content, countryCode = '82' } = smsParam
+    const { to, content } = smsParam
+    const countryCode = '82'
     this.path = `/sms/v2/services/${serviceId}/messages`
     const { timestamp, signature } = generateApiSignature({ method: this.method, url: this.path, ncpAuthKey })
     this.headers = {

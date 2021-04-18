@@ -9,9 +9,9 @@ export type NCPAuthKeyType = {
   secretKey: string
 }
 
-export type ApiClientResponse = {
+export type ApiClientResponse<T> = {
   isSuccess: boolean
-  data?: {},
+  data?: T
   errorMessage?: {}
 }
 
@@ -46,32 +46,3 @@ export type SMSserviceAuthType = {
   signature: string
 }
 
-/**
- * SendSMSParamType
- * 
- * 2021. 4. 15 Changes
- * 
- * @memberof SMS
- * @alias SendSMSParamType
- */
-export type SendSMSParamType = {
-  to:           string
-  content:      string
-  countryCode?: string
-}
-
-/**
- * SendSMSReturnType
- * 
- * 2021. 4. 15 Changes
- * 
- * @memberof SMS
- * @alias SendSMSReturnType
- */
-export type SendSMSReturnType = {
-  isSuccess:    boolean
-  status:       number
-  statusText:   string
-  requestId?:   string
-  requestTime?: string
-};

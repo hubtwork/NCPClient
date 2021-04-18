@@ -33,7 +33,6 @@ export class MockSMS {
     try {
       const response = await this.client.request(apiRequest)
       if (response.status === 202) {
-        console.log(response)
         return {
           isSuccess: true,  
           status: response.status,
@@ -49,7 +48,6 @@ export class MockSMS {
         }
       }
     } catch (error) {
-      console.log(error)
       return {
         isSuccess: false,
         status: error.response.status || 500,
