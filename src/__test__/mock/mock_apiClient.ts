@@ -1,21 +1,16 @@
 import axios, { AxiosResponse, Method } from 'axios'
-import { NCPAuthKeyType } from '../../types/auth_types'
 import { ApiClientResponse } from '../../types/return_types'
 
 export class MockApiClient {
-  
-  public readonly ncpAuthKey: NCPAuthKeyType
 
   private baseURL: string
   private timeout: number
 
   constructor(
-    ncpAuthKey: NCPAuthKeyType,
     baseURL: string,
     timeout: number = 2000
   )
   {
-    this.ncpAuthKey = ncpAuthKey
     this.baseURL = baseURL
     this.timeout = timeout
   }

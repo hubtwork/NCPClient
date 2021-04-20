@@ -88,3 +88,22 @@ type MessageResultType = {
   // ISP
   telcoCode: string
 }
+
+
+
+export type PapagoTranslationReturnType = {
+  message: PapagoTranslationMessageType
+}
+
+type PapagoTranslationMessageType = {
+  '@type': string,
+  '@service': string,
+  '@version': string,
+  result: PapagoTranslationResultType
+}
+
+type PapagoTranslationResultType = {
+  srcLangType: string
+  tarLangType: string
+  translatedText: string
+}

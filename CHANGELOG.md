@@ -1,5 +1,11 @@
 ## Changes
 
+## v1.0.6 
+
+
+
+
+
 ## v1.0.5 ( 2021. 4. 20 )
 
 #### NCPClient will support service's unique error types

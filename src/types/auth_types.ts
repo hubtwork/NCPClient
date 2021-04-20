@@ -40,3 +40,8 @@ export type SMSserviceAuthType = {
   signature: string
 }
 
+
+export type NaverOpenApiAuthType = {
+  clientId: string
+  clientSecret: string
+}

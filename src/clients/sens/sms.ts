@@ -49,7 +49,7 @@ export class SMS {
   ) {
     this.smsAuth = smsAuth
     this.ncpAuthKey = ncpAuthKey
-    this.client = new ApiClient(ncpAuthKey, baseUrl)
+    this.client = new ApiClient(baseUrl)
     
   }
   /**

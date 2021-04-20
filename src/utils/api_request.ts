@@ -5,16 +5,7 @@ import { ApiError, ApiErrorEnum, ServiceError } from './errors'
 
 
 export class ApiClient {
-  /**
-   * The account access Key for API authentication
-   * 
-   * @access public 
-   * @readonly
-   * @type {NCPAuthKeyType} 
-   * @memberof ApiClient
-   */
-  public readonly ncpAuthKey: NCPAuthKeyType
-
+  
   /**
    * The session expressed by Wrapped AxiosInstance
    * 
@@ -27,18 +18,15 @@ export class ApiClient {
   /**
    * Creates an instance of ApiClient.
    * 
-   * @param {NCPAuthKeyType} ncpAuthKey NCP API authentication data for using API
    * @param {string} baseURL The baseURL of each session ( based on service )
    * @param {(number | undefined)} timeout Timeout configuration ( millisecond )
    * @memberof ApiClient
    */
   constructor(
-    ncpAuthKey: NCPAuthKeyType,
     baseURL: string,
     timeout: number = 2000
   )
   {
-    this.ncpAuthKey = ncpAuthKey
     this.client = axios.create({
       baseURL: baseURL,
       timeout: timeout,
@@ -147,18 +135,4 @@ export interface ApiRequest {
   method:   Method
   headers: { [key: string]: string }
   body?:     { [key: string]: any }
-}
-
-/**
- * Enum for Errors by http status code which provided by NCP API
- * @readonly
- * @enum {number} Http Status Code
- */
-enum NcpError {
-  badRequest = 400,
-  unauthorized = 401,
-  forbidden = 403,
-  notFound = 404,
-  tooManyRequests = 429,
-  internalServerError = 500
 }

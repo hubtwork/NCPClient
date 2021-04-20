@@ -20,7 +20,7 @@ export class MockSMS {
   ) {
     this.smsAuth = smsAuth
     this.ncpAuthKey = ncpAuthKey
-    this.client = new MockApiClient(ncpAuthKey, baseUrl)
+    this.client = new MockApiClient(baseUrl)
   }
 
   public async sendSMS(smsParam: SendSMSParamType | SendSMSParamType[], countryCode?: number): Promise<ApiClientResponse<SendSMSReturnType>> {
