@@ -1,5 +1,19 @@
 ## Changes
 
+## v1.0.5 ( 2021. 4. 19 )
+
+#### [ SENS - SMS service ] SendSMS support Reservation
+
+- If you want to use SMS Reservation, just pass the **nullable Reservation parameter**
+
+  ~~~
+  
+  ~~~
+
+  
+
+
+
 ## v 1.0.4 ( 2021. 4. 18 )
 
 #### ApiRequest clarity guaranteed

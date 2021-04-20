@@ -1,31 +1,14 @@
 const axios = require('axios')
-import { MockSMS } from './mock/mock_smsClient';
-import { SendSMSParamType } from '../types/param_types';
-import { SendSMSReturnType } from '../types/return_types';
-import { NCPAuthKeyType, SMSserviceAuthType } from '../types/auth_types';
+import { MockSMS } from '../mock/mock_smsClient';
+import { SendSMSParamType } from '../../types/param_types';
+import { SearchMessageRequestReturnType, SearchMessageResultReturnType, SendSMSReturnType } from '../../types/return_types';
+import { NCPAuthKeyType, SMSserviceAuthType } from '../../types/auth_types';
 
 jest.mock('axios')
 
-const smsSingleParam: SendSMSParamType = {
-  to: '01012271994',
-  content: 'test single'
-}
+const requestId: string = '3a4cb63856b04f93aa43805188d6f695'
 
-const smsMultiParam: SendSMSParamType[] = [
-  {
-    to: '01012271994',
-    content: 'test triple'
-  },
-  {
-  to: '01031412311',
-  content: 'test triple'
-  },
-  {
-    to: '01022293331',
-    content: 'test double'
-  }]
-
-describe('SmsClient TestSuite', () => {
+describe('SMS.SearchSmsRequest TestSuite', () => {
   let client: MockSMS
   let ncpAuthKey = <NCPAuthKeyType>{
     accessKey: "accessKey",
@@ -49,75 +32,80 @@ describe('SmsClient TestSuite', () => {
     ).not.toThrow()
   })
 
-  test('Successful request for sendSMS (single)', async () => {
+  test('Successful request for searchMessageRequest with single Message', async () => {
     
     axios.mockImplementationOnce(() =>
       Promise.resolve({
-        requestId: "8ac25d36c3f849c7b1ba1c705ce4e9e7",
-        requestTime: "2021-04-18T19:27:10.044",
-        statusCode: "202",
-        statusName: "success"
+        isSuccess: true,
+        data: {
+          statusCode: '202',
+          statusName: 'success',
+          requestId: '3a4cb63856b04f93aa43805188d6f695',
+          messages: [ {
+            messageId: '0-ESA-202104-4104031-0',
+            requestTime: '2021-04-19 06:41:15',
+            from: '01012345678',
+            to: '01043219876',
+            contentType: 'COMM',
+            countryCode: '82'
+          } ]
+        }
       })
     )
     
-    const response = await client.sendSMS(smsSingleParam)
+    const response = await client.searchMessageRequest(requestId)
     expect(response.isSuccess).toEqual(true)
     if (response.data) {
-      console.log('data detected')
-      const data: SendSMSReturnType = response.data || undefined
+      const data: SearchMessageRequestReturnType = response.data || undefined
       expect(data !== undefined).toEqual(true)
       expect(data.statusCode).toEqual('202')
-      expect(data.statusText).toEqual('success')
+      expect(data.statusName).toEqual('success')
       expect(data.requestId !== undefined).toEqual(true)
-      expect(data.requestTime !== undefined).toEqual(true)
+      expect(data.messages.length > 0).toEqual(true)
+      expect(data.messages[0].countryCode).toEqual('82')
+      expect(data.messages[0].requestTime.match(/(\d{4})-(\d{2})-(\d{2})(\s)(\d{2}):(\d{2}):(\d{2})/) !== null).toEqual(true)
     }
   })
 
-  test('Successful request for sendSMS (multi)', async () => {
+  test('Successful request for searchMessageRequest with multi Message', async () => {
     
     axios.mockImplementationOnce(() =>
       Promise.resolve({
-        requestId: "8ac25d36c3f849c7b1ba1c705ce4e9e7",
-        requestTime: "2021-04-18T19:27:10.044",
-        statusCode: "202",
-        statusName: "success"
+        isSuccess: true,
+        data: {
+          statusCode: '202',
+          statusName: 'success',
+          requestId: '3a4cb63856b04f93aa43805188d6f695',
+          messages: [
+            {
+              messageId: '0-ESA-202104-4104031-1',
+              requestTime: '2021-04-19 06:41:15',
+            },
+            {
+              messageId: '0-ESA-202104-4104031-2',
+              requestTime: '2021-04-19 06:41:15',
+            },
+            {
+              messageId: '0-ESA-202104-4104031-3',
+              requestTime: '2021-04-19 06:41:15',
+            }
+          ]
+        }
       })
     )
     
-    const response = await client.sendSMS(smsMultiParam)
+    const response = await client.searchMessageRequest(requestId)
     expect(response.isSuccess).toEqual(true)
     if (response.data) {
-      console.log('data detected')
-      const data: SendSMSReturnType = response.data || undefined
+      const data: SearchMessageRequestReturnType = response.data || undefined
       expect(data !== undefined).toEqual(true)
       expect(data.statusCode).toEqual('202')
-      expect(data.statusText).toEqual('success')
+      expect(data.statusName).toEqual('success')
       expect(data.requestId !== undefined).toEqual(true)
-      expect(data.requestTime !== undefined).toEqual(true)
+      expect(data.messages.length > 1).toEqual(true)
+      expect(data.messages[0].requestTime === data.messages.slice(-1)[0].requestTime).toEqual(true)
+      expect(data.messages[0].messageId !== data.messages.slice(-1)[0].messageId).toEqual(true)
     }
-  })
-
-  test('Invalid Response with http status Code 400', async () => {
-    
-    axios.mockImplementationOnce(() =>
-      Promise.reject({
-        response: {
-          status: 400,
-          statusText: 'Bad Request'
-        },
-        request: {},
-        config: {}
-      })
-    )
-    // With empty sendsmsParam, will receive 400 Bad Request 
-    const smsWrongParam: SendSMSParamType = {
-      to: '',
-      content: ''
-    }
-    
-    const response = await client.sendSMS(smsWrongParam)
-    expect(response.isSuccess).toEqual(false)
-    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 400')
   })
 
   test('Invalid Response with http status Code 401', async () => {
@@ -136,7 +124,7 @@ describe('SmsClient TestSuite', () => {
     // Assume Signature in Header calculated wrong, will receive 401 Unauthorized
     // Reason :: wrong Path || wrong Method || wrong Authentication Key ( Account )
     
-    const response = await client.sendSMS(smsSingleParam)
+    const response = await client.searchMessageRequest(requestId)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 401')
   })
@@ -162,7 +150,7 @@ describe('SmsClient TestSuite', () => {
     }
     client = new MockSMS( 'http://sms.test.com', ncpAuthKey, smsAuth )
     
-    const response = await client.sendSMS(smsSingleParam)
+    const response = await client.searchMessageRequest(requestId)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 403')
   })
@@ -180,15 +168,9 @@ describe('SmsClient TestSuite', () => {
       })
     )
 
-    // if smsAuth Values are wrong , will receive 404 Unauthorized
-    // Not Found :: means can't find given SMS service Auth Info
-    smsAuth = <SMSserviceAuthType>{
-      phone: "wrongPhone",
-      serviceId: "wrongServiceId"
-    }
-    client = new MockSMS( 'http://sms.test.com', ncpAuthKey, smsAuth )
-    
-    const response = await client.sendSMS(smsSingleParam)
+    // if requestId Value which can't found in api , will receive 404 Not Found
+    // Not Found :: means can't find given SMS Info
+    const response = await client.searchMessageRequest('wrongRequestId')
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 404')
   })
@@ -197,24 +179,16 @@ describe('SmsClient TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.reject({
-        response: {
-          status: 404,
-          statusText: 'Not Found'
-        },
+        response: {},
         request: {},
         config: {}
       })
     )
 
-    // if smsAuth Values are wrong , will receive 404 Unauthorized
-    // Not Found :: means can't find given SMS service Auth Info
-    smsAuth = <SMSserviceAuthType>{
-      phone: "wrongPhone",
-      serviceId: "wrongServiceId"
-    }
+    // if invalid URL ( baseUrl + path ) passed, service will return InvalidURL ERROR
     client = new MockSMS('htt:sms.test.com', ncpAuthKey, smsAuth )
     
-    const response = await client.sendSMS(smsSingleParam)
+    const response = await client.searchMessageRequest(requestId)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Invalid URL')
   })

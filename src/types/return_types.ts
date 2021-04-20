@@ -27,7 +27,12 @@ export type ApiClientResponse<T> = {
   requestTime: string
 }
 
-
+/**
+ * SearchMessageRequestReturnType
+ * 
+ * @memberof SMS
+ * @alias SearchMessageRequestReturnType
+ */
 export type SearchMessageRequestReturnType = {
   requestId: string
   statusCode: string
@@ -35,6 +40,12 @@ export type SearchMessageRequestReturnType = {
   messages: MessageRequestType[]
 }
 
+/**
+ * MessageRequestType
+ * 
+ * @memberof SearchMessageRequestReturnType
+ * @alias MessageRequestType
+ */
 type MessageRequestType = {
   messageId: string
   requestTime: string
@@ -44,12 +55,24 @@ type MessageRequestType = {
   to: string
 }
 
-export type SearchMessageResulReturnType = {
+/**
+ * SearchMessageResultReturnType
+ * 
+ * @memberof SMS
+ * @alias SearchMessageResultReturnType
+ */
+export type SearchMessageResultReturnType = {
   statusCode: string
   statusName: string
   messages: MessageResultType[]
 }
 
+/**
+ * MessageResultType
+ * 
+ * @memberof SearchMessageResultReturnType
+ * @alias MessageResultType
+ */
 type MessageResultType = {
   requestTime: string
   contentType: string
