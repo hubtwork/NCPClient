@@ -125,11 +125,11 @@ export class SMS {
 
   /**
    * Construct searchMessageResult Service apiRequest. Generate signature for signing, pass requestId for search.
-   * return the requestData for given messageId. It also returns messages info refer to the request.
-   * It's response data is more detail than searchMessageRequest with completeTime, statuses, telcoCode, etc.
+   * return the requestData for given messageId. It also returns messages info refer to the message.
+   * It's response data is more detail than searchMessageResult with completeTime, statuses, telcoCode, etc.
    * @async
    * @access public
-   * @param {string} messageId - messageId which get from response of sendSMS API
+   * @param {string} messageId - messageId which get from response of searchMessageRequest API
    * @returns {Promise<ApiClientResponse<SearchMessageRequestReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
    * @memberof SMS
    */

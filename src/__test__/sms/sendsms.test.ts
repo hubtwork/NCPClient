@@ -1,7 +1,7 @@
 const axios = require('axios')
 import { MockSMS } from '../mock/mock_smsClient';
 import { SendSMSParamType } from '../../types/param_types';
-import { SearchMessageRequestReturnType, SearchMessageResultReturnType, SendSMSReturnType } from '../../types/return_types';
+import { SendSMSReturnType } from '../../types/return_types';
 import { NCPAuthKeyType, SMSserviceAuthType } from '../../types/auth_types';
 
 jest.mock('axios')

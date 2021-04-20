@@ -87,6 +87,4 @@ type MessageResultType = {
   completeTime: string
   // ISP
   telcoCode: string
-  // MMS only
-  files?: { name: string }[]
 }

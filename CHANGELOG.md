@@ -1,20 +1,38 @@
 ## Changes
 
-## v1.0.5 ( 2021. 4. 19 )
+## v1.0.5 ( 2021. 4. 20 )
 
-#### [ SENS - SMS service ] SendSMS support Reservation
+#### NCPClient will support service's unique error types
 
-- If you want to use SMS Reservation, just pass the **nullable Reservation parameter**
+- NCPClient's request module, `ApiRequest` can handle service's unique errors now
 
+  > **service's unique error** means almost parameter validation.
+  >
+  > If given parameter is incorrect with NCP-defined format, It will return **ApiClientResponse with error** and request won't send.
+
+#### [ SENS - SMS service ] SearchMessageRequest / SearchMessageResult now supported
+
+- Using **SendSMS API** , you can get `requestId` of request from response
+
+- **SearchMessageRequest** with requestId from **SendSMS API's response** will return the detail delivery request
+
+  ~~~typescript
+  const { isSuccess, data } = await smsService.searchMessageRequest('requestId')
   ~~~
-  
+
+- **SearchMessageResponse** with messageId from **SearchMessageRequest API's response** will return the detail delivery results
+
+  ~~~typescript
+  const { isSuccess, data } = await smsService.searchMessageResult('messageId')
   ~~~
 
-  
+#### Dependency changed
+
+- **crypto** changed to built-in module, so deprecated in dependency
 
 
 
-## v 1.0.4 ( 2021. 4. 18 )
+## v1.0.4 ( 2021. 4. 18 )
 
 #### ApiRequest clarity guaranteed
 

@@ -22,7 +22,6 @@ An easy-to-use typescript wrapper for [Naver Cloud Platform API](https://api.ncl
 ## Dependency
 
 - axios
-- crypto
 
 
 
@@ -66,33 +65,60 @@ const smsService = sens.smsService(ncpAuthKey, smsAuthKey)
 
 - **SMS Send**
 
-~~~javascript
-// type your SMS send parameter 
-const sendSMSparam = {
-    to: 'recipient phoneNumber',
-    content: 'message to send'
-}
-// to send to multiple people 
-const multipleSMSparam = [
-  { to: 'r1', content: 'c1'},
-  { to: 'r2', content: 'c2'},
-  { to: 'r3', content: 'c3'}
-]
+  ~~~javascript
+  // type your SMS send parameter 
+  const sendSMSparam = {
+      to: 'recipient phoneNumber',
+      content: 'message to send'
+  }
+  // to send to multiple people 
+  const multipleSMSparam = [
+    { to: 'r1', content: 'c1'},
+    { to: 'r2', content: 'c2'},
+    { to: 'r3', content: 'c3'}
+  ]
+  
+  async function sendMessage() {
+    	// if you don't pass countryCode, default countryCode is 82.
+      const {isSuccess, data, errorMessage } = await smsService.sendSMS( sendSMSparam, countryCode )
+      // write something after async function
+      if (isSuccess) {
+          // do something with data
+      } else {
+          // handle with errorMessage
+      }
+  }
+  ~~~
 
-async function sendMessage() {
-  	// if you don't pass countryCode, default countryCode is 82.
-    const {isSuccess, data, errorMessage } = await smsService.sendSMS( sendSMSparam, countryCode )
-    // write something after async function
-    if (isSuccess) {
-        // do something with data
-    } else {
-        // handle with errorMessage
-    }
-}
+- **Search message delivery request**
 
-~~~
+  ~~~javascript
+  async function searchMessageDeliveryRequest() {
+      const {isSuccess, data, errorMessage } = await smsService.searchMessageRequest('requestId')
+      // write something after async function
+      if (isSuccess) {
+          // do something with data
+      } else {
+          // handle with errorMessage
+      }
+  }
+  ~~~
 
+- **Search message delivery results**
 
+  ~~~javascript
+  async function searchMessageDeliveryResults() {
+      const {isSuccess, data, errorMessage } = await smsService.searchMessageResult('messageId')
+      // write something after async function
+      if (isSuccess) {
+          // do something with data
+      } else {
+          // handle with errorMessage
+      }
+  }
+  ~~~
+
+  
 
 ## Types 
 
@@ -140,7 +166,57 @@ type SendSMSReturnType = {
 }
 ~~~
 
- 
+**Search message delivery request**
+
+~~~typescript
+export type SearchMessageRequestReturnType = {
+  requestId: string
+  statusCode: string
+  statusName: string
+  // `messages` contains messages associated with requestId
+  messages: MessageRequestType[]
+}
+// Each message's summary
+type MessageRequestType = {
+  messageId: string
+  requestTime: string
+  contentType: string
+  countryCode: string
+  from: string
+  to: string
+}
+~~~
+
+**Search message delivery results**
+
+~~~typescript
+export type SearchMessageResultReturnType = {
+  statusCode: string
+  statusName: string
+  // `messages` contains messages associated with messageId
+  messages: MessageResultType[]
+}
+// Each message's detail
+type MessageResultType = {
+  requestTime: string
+  // `contentType` will be 'COMM' | 'AD', but currently not supported with AD message api
+  contentType: string
+  content: string
+  countryCode: string
+  from: string
+  to: string
+  status: string
+  statusCode: string
+  statusMessage: string
+  statusName: string
+  // `completeTime` means the time when request completed
+  completeTime: string
+  // `telcoCode` means telecommunication Provider Info
+  telcoCode: string
+}
+~~~
+
+
 
 ## API Response statuses
 
@@ -162,7 +238,9 @@ API Response status provided by Naver Cloud Platform
 
 #### (SENS) SMS API v2
 
-- **SMS Send**
+- **Send SMS**
+- **Search message delivery request**
+- **Search message delivery results**
 
 
 
