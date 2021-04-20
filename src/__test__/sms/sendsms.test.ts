@@ -1,8 +1,8 @@
 const axios = require('axios')
-import { MockSMS } from './mock/mock_smsClient';
-import { SendSMSParamType } from '../types/param_types';
-import { SendSMSReturnType } from '../types/return_types';
-import { NCPAuthKeyType, SMSserviceAuthType } from '../types/auth_types';
+import { MockSMS } from '../mock/mock_smsClient';
+import { SendSMSParamType } from '../../types/param_types';
+import { SendSMSReturnType } from '../../types/return_types';
+import { NCPAuthKeyType, SMSserviceAuthType } from '../../types/auth_types';
 
 jest.mock('axios')
 
@@ -23,7 +23,8 @@ const smsMultiParam: SendSMSParamType[] = [
   {
     to: '01022293331',
     content: 'test double'
-  }]
+  }
+]
 
 describe('SmsClient TestSuite', () => {
   let client: MockSMS
@@ -180,7 +181,7 @@ describe('SmsClient TestSuite', () => {
       })
     )
 
-    // if smsAuth Values are wrong , will receive 404 Unauthorized
+    // if smsAuth Values are wrong , will receive 404 Not Found
     // Not Found :: means can't find given SMS service Auth Info
     smsAuth = <SMSserviceAuthType>{
       phone: "wrongPhone",
@@ -197,21 +198,13 @@ describe('SmsClient TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.reject({
-        response: {
-          status: 404,
-          statusText: 'Not Found'
-        },
+        response: {},
         request: {},
         config: {}
       })
     )
 
-    // if smsAuth Values are wrong , will receive 404 Unauthorized
-    // Not Found :: means can't find given SMS service Auth Info
-    smsAuth = <SMSserviceAuthType>{
-      phone: "wrongPhone",
-      serviceId: "wrongServiceId"
-    }
+    // if invalid URL ( baseUrl + path ) passed, service will return InvalidURL ERROR
     client = new MockSMS('htt:sms.test.com', ncpAuthKey, smsAuth )
     
     const response = await client.sendSMS(smsSingleParam)

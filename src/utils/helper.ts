@@ -22,11 +22,11 @@ export function generateApiSignature({
 }: ApiSignatureParamType): ApiSignatureReturnType {
   const { accessKey, secretKey } = ncpAuthKey
   const signParams: string[] = []
-  const space = ' ';				// one space
-	const newLine = '\n';				// new line
+  const space = ' '				// one space
+	const newLine = '\n'				// new line
 	var timestamp = Date.now().toString()			// current timestamp (epoch)
 
-  var hmac = crypto.createHmac('sha256', secretKey);
+  var hmac = crypto.createHmac('sha256', secretKey)
   
 	signParams.push(method);
 	signParams.push(space);

@@ -26,3 +26,65 @@ export type ApiClientResponse<T> = {
   requestId:   string
   requestTime: string
 }
+
+/**
+ * SearchMessageRequestReturnType
+ * 
+ * @memberof SMS
+ * @alias SearchMessageRequestReturnType
+ */
+export type SearchMessageRequestReturnType = {
+  requestId: string
+  statusCode: string
+  statusName: string
+  messages: MessageRequestType[]
+}
+
+/**
+ * MessageRequestType
+ * 
+ * @memberof SearchMessageRequestReturnType
+ * @alias MessageRequestType
+ */
+type MessageRequestType = {
+  messageId: string
+  requestTime: string
+  contentType: string
+  countryCode: string
+  from: string
+  to: string
+}
+
+/**
+ * SearchMessageResultReturnType
+ * 
+ * @memberof SMS
+ * @alias SearchMessageResultReturnType
+ */
+export type SearchMessageResultReturnType = {
+  statusCode: string
+  statusName: string
+  messages: MessageResultType[]
+}
+
+/**
+ * MessageResultType
+ * 
+ * @memberof SearchMessageResultReturnType
+ * @alias MessageResultType
+ */
+type MessageResultType = {
+  requestTime: string
+  contentType: string
+  content: string
+  countryCode: string
+  from: string
+  to: string
+  status: string
+  statusCode: string
+  statusMessage: string
+  statusName: string
+  completeTime: string
+  // ISP
+  telcoCode: string
+}

@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
 import { NCPAuthKeyType } from '../types/auth_types'
 import { ApiClientResponse } from '../types/return_types'
+import { ApiError, ApiErrorEnum, ServiceError } from './errors'
 
 
 export class ApiClient {
@@ -55,8 +56,9 @@ export class ApiClient {
    * @returns {Promise<ApiClientResponse<T>>} return Promise response of wrapped with error handling
    * @memberof ApiClient
    */
-  public async request<T>(apiRequest: ApiRequest): Promise<ApiClientResponse<T>> {
+  public async request<T>(apiRequest: ApiRequest, serviceError?: ServiceError): Promise<ApiClientResponse<T>> {
     try {
+      if (serviceError) throw serviceError
       const val = await this.createRequest<T>(apiRequest)
       return {
         isSuccess: true,
@@ -145,27 +147,6 @@ export interface ApiRequest {
   method:   Method
   headers: { [key: string]: string }
   body?:     { [key: string]: any }
-}
-
-/**
- * Enum for API Error represented.
- * Covering from client's error or validation to error for server response
- * @readonly
- * @enum {string} Error Messages
- */
-enum ApiErrorEnum {
-  invalidURL = 'Invalid URL',
-  httpStatusCode = `Unexpected HTTP Status Code :`,
-  unexpectedResponse = 'Unexpected response from the server',
-  noResponseFromServer = 'No response from the server',
-  requestConfigurationError ='Error occured during setup request'
-}
-
-class ApiError extends Error {
-  constructor(error: ApiErrorEnum, httpCode?: number) {
-    httpCode === undefined ? super(error) : super(`${error} ${httpCode}`)
-    Object.setPrototypeOf(this, ApiError.prototype)
-  }
 }
 
 /**
