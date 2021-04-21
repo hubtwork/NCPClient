@@ -1,11 +1,5 @@
 
 
-export const MOBILE_OS = {
-  IOS: 'iOS',
-  Android: 'Android'
-} as const
-type MOBILE_OS = typeof MOBILE_OS[keyof typeof MOBILE_OS]
-
 export const PAPAGOlanguageSupports = {
   ko: ['en', 'ja', 'zh-CN', 'zh-TW', 'vi', 'id', 'th', 'de', 'ru', 'es', 'it', 'fr'],
   en: ['ko', 'ja', 'fr', 'zh-CN', 'zh-TW'],

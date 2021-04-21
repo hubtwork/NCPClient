@@ -107,3 +107,21 @@ type PapagoTranslationResultType = {
   tarLangType: string
   translatedText: string
 }
+
+export type PapagoDetectLanguageReturnType = {
+  langCode: string
+}
+
+export type PapagoKoreanNameRomanizerReturnType = {
+  aResult : PapagoKoreanNameRomanizerResultType[]
+}
+
+type PapagoKoreanNameRomanizerResultType = {
+  sFirstName: string
+  aItems: PapagoKoreanNameRomanizerItemType[]
+}
+
+type PapagoKoreanNameRomanizerItemType = {
+  name: string
+  score: string
+}
