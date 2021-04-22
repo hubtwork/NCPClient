@@ -61,7 +61,6 @@ describe('PAPAGO.Translation TestSuite', () => {
   })
 
   test('Invalid Request with empty source', async () => {
-    
     axios.mockImplementationOnce(() =>
       Promise.reject()
     )

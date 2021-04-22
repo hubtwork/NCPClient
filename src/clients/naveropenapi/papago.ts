@@ -41,9 +41,7 @@ export class PAPAGO {
       body: body
     }
 
-    let serviceError: ServiceError | undefined = this.languageSupportValidation(source, target)
-    if (text.length === 0) serviceError = new ServiceError("Text parameter is needed, please check it")
-    else if (target.length > 5000) serviceError = new ServiceError("Text parameter exceeds the maximum length, please check it")
+    let serviceError: ServiceError | undefined = this.languageSupportValidation(source, target, text)
     
     return this.client.request<PapagoTranslationReturnType>(apiRequest, serviceError)
   }
@@ -66,8 +64,8 @@ export class PAPAGO {
       headers: headers,
       body: body
     }
-    let serviceError: ServiceError | undefined = undefined
-    if (text.length === 0) serviceError = new ServiceError("Empty Text, please check it")
+    let serviceError: ServiceError | undefined = this.detectLanguageValidation(text)
+    
     return this.client.request<PapagoDetectLanguageReturnType>(apiRequest, serviceError)
   }
 
@@ -85,10 +83,12 @@ export class PAPAGO {
       method: method,
       headers: headers
     }
-    return this.client.request<PapagoKoreanNameRomanizerReturnType>(apiRequest)
+
+    let serviceError: ServiceError | undefined = this.koreanNameRomanizerValidation(koreanName)
+    return this.client.request<PapagoKoreanNameRomanizerReturnType>(apiRequest, serviceError)
   }
 
-  private languageSupportValidation(source: string, target: string): ServiceError | undefined {
+  private languageSupportValidation(source: string, target: string, text: string): ServiceError | undefined {
     // get all Support Languages for translation api 
     const languageSupports: string[] = Object.values(PAPAGOlanguages)
     if (source.length === 0) return new ServiceError("Source parameter is needed, please check it")
@@ -97,6 +97,20 @@ export class PAPAGO {
     else if (!(languageSupports.includes(target))) return new ServiceError("Unsupported target language, please check it")
     else if (source === target) return new ServiceError("Source and target are identical, please check it")
     else if (!(Object.entries(PAPAGOlanguageSupports).filter(function (s) { return s[0] === source }).map(function (s) { return s[1] })[0].includes(target))) return new ServiceError("There is no source–to-target translator, please check it")
+    else if (text.length === 0) return new ServiceError("Text parameter is needed, please check it")
+    else if (target.length > 5000) return new ServiceError("Text parameter exceeds the maximum length, please check it")
     return undefined
   }
+  
+  private detectLanguageValidation(text: string): ServiceError | undefined {
+
+    if (text.length === 0) return new ServiceError("Empty Text, please check it")
+    return undefined
+  }
+
+  private koreanNameRomanizerValidation(name: string): ServiceError | undefined {
+
+    return undefined
+  }
+
 }
