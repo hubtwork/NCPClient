@@ -103,13 +103,15 @@ export class PAPAGO {
   }
   
   private detectLanguageValidation(text: string): ServiceError | undefined {
-
-    if (text.length === 0) return new ServiceError("Empty Text, please check it")
+    // for detectLanguage, text parameter is needed
+    if (text.length === 0) return new ServiceError("Text parameter is needed, please check it")
     return undefined
   }
 
   private koreanNameRomanizerValidation(name: string): ServiceError | undefined {
-
+    // for koreanNameRomanazier, name parameter is needed and is to be only korean
+    if (name.length === 0) return new ServiceError("KoreanName parameter is needed, please check it")
+    else if (name.match(/^[가-힣]+$/) != null) return new ServiceError("Only full Korean name parameter with no white space is allowed, please check it")
     return undefined
   }
 
