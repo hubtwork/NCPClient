@@ -26,7 +26,7 @@ const smsMultiParam: SendSMSParamType[] = [
   }
 ]
 
-describe('SmsClient TestSuite', () => {
+describe('Sms.SendSMS TestSuite', () => {
   let client: MockSMS
   let ncpAuthKey = <NCPAuthKeyType>{
     accessKey: "accessKey",
@@ -198,9 +198,6 @@ describe('SmsClient TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.reject({
-        response: {},
-        request: {},
-        config: {}
       })
     )
 

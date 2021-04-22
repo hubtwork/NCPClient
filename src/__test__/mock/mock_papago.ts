@@ -1,22 +1,23 @@
+
+import { ApiRequest, MockApiClient } from "./mock_apiClient"
 import { Method } from "axios"
 import { NaverOpenApiAuthType } from "../../types/auth_types"
-import { ApiClient, ApiRequest } from "../../utils/api_request"
 import { PAPAGOlanguages, PAPAGOlanguageSupports } from '../../types/processing_types'
 import { ApiClientResponse, PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType } from "../../types/return_types"
 import { ServiceError } from "../../utils/errors"
 
 
-export class PAPAGO {
+export class MockPAPAGO {
 
   private openApiAuth: NaverOpenApiAuthType
 
-  private client: ApiClient
+  private client: MockApiClient
 
   constructor(
     baseUrl: string,
     openApiAuth: NaverOpenApiAuthType
   ) {
-    this.client = new ApiClient(baseUrl)
+    this.client = new MockApiClient(baseUrl)
     this.openApiAuth = openApiAuth
   }
 

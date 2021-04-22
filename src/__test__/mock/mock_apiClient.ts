@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, Method } from 'axios'
 import { ApiClientResponse } from '../../types/return_types'
+import { ServiceError } from '../../utils/errors'
 
 export class MockApiClient {
 
@@ -15,8 +16,9 @@ export class MockApiClient {
     this.timeout = timeout
   }
 
-  public async request<T>(apiRequest: ApiRequest): Promise<ApiClientResponse<T>> {
+  public async request<T>(apiRequest: ApiRequest, serviceError?: ServiceError): Promise<ApiClientResponse<T>> {
     try {
+      if (serviceError) throw serviceError
       const val = await this.createRequest<T>(apiRequest)
       return {
         isSuccess: true,
