@@ -6,7 +6,13 @@ import { PAPAGO } from "./papago"
 export class NaverOpenAPI {
   
   private baseUrl: string = BaseURL.naveropenapi
-  
+  /**
+   * Get PAPAGO Service agent.
+   * @access public
+   * @param {NaverOpenApiAuthType} apiAuth Service identification for using NaverOpenApi
+   * @returns {PAPAGO} return PAPAGO Service agent
+   * @memberof NaverOpenAPI
+   */
   public papagoService(
     openApiAuth: NaverOpenApiAuthType
   ): PAPAGO {

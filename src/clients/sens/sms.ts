@@ -7,7 +7,7 @@ import { generateApiSignature } from "../../utils/helper"
 
 export class SMS {
   /**
-   * The account access Key for API authentication
+   * The ApiClient for working with http request
    * 
    * @access private 
    * @type {ApiClient} 

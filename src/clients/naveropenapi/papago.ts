@@ -7,11 +7,31 @@ import { ServiceError } from "../../utils/errors"
 
 
 export class PAPAGO {
-
+  /**
+   * The account clientId / clientSecret key pair for NaverOpenAPI authentication
+   * 
+   * @access private 
+   * @type {NaverOpenApiAuthType} 
+   * @memberof PAPAGO
+   */
   private openApiAuth: NaverOpenApiAuthType
-
+  
+  /**
+   * The ApiClient for working with http request
+   * 
+   * @access private 
+   * @type {ApiClient} 
+   * @memberof PAPAGO
+   */
   private client: ApiClient
 
+  /**
+   * Creates an instance of PAPAGO service agent.
+   * 
+   * @param {string} baseURL The baseURL of each session ( based on service )
+   * @param {NaverOpenApiAuthType} apiAuth Service identification for using NaverOpenApi
+   * @memberof PAPAGO
+   */
   constructor(
     baseUrl: string,
     openApiAuth: NaverOpenApiAuthType
@@ -20,6 +40,17 @@ export class PAPAGO {
     this.openApiAuth = openApiAuth
   }
 
+  /**
+   * Construct Translation Service apiRequest. pass source, target language and text want to translate.
+   * Input parameter validation is implemented which handles API service Error beforehand request.
+   * @async
+   * @access public
+   * @param {string} source - text's language which want to translate.
+   * @param {string} target - language which want to be translated.
+   * @param {string} text - text which want to be translated.
+   * @returns {Promise<ApiClientResponse<PapagoTranslationReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
+   * @memberof PAPAGO
+   */
   public async translation(source: string, target: string, text: string): Promise<ApiClientResponse<PapagoTranslationReturnType>> {
     const path = 'nmt/v1/translation'
     const method: Method = 'POST'
@@ -42,10 +73,18 @@ export class PAPAGO {
     }
 
     let serviceError: ServiceError | undefined = this.languageSupportValidation(source, target, text)
-    
     return this.client.request<PapagoTranslationReturnType>(apiRequest, serviceError)
   }
 
+  /**
+   * Construct Detect Language Service apiRequest. pass text want to detect language.
+   * Input parameter validation is implemented which handles API service Error beforehand request.
+   * @async
+   * @access public
+   * @param {string} text - text which want to detect language.
+   * @returns {Promise<ApiClientResponse<PapagoDetectLanguageReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
+   * @memberof PAPAGO
+   */
   public async detectLanguage(text: string): Promise<ApiClientResponse<PapagoDetectLanguageReturnType>> {
     const path = 'langs/v1/dect'
     const method: Method = 'POST'
@@ -64,11 +103,20 @@ export class PAPAGO {
       headers: headers,
       body: body
     }
+
     let serviceError: ServiceError | undefined = this.detectLanguageValidation(text)
-    
     return this.client.request<PapagoDetectLanguageReturnType>(apiRequest, serviceError)
   }
 
+  /**
+   * Construct Korean Name Romanizer Service apiRequest. pass korean name to be romanized analyzation.
+   * Input parameter validation is implemented which handles API service Error beforehand request.
+   * @async
+   * @access public
+   * @param {string} koreanName - koreanName which is to be romanized.
+   * @returns {Promise<ApiClientResponse<PapagoKoreanNameRomanizerReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
+   * @memberof PAPAGO
+   */
   public async koreanNameRominizer(koreanName: string): Promise<ApiClientResponse<PapagoKoreanNameRomanizerReturnType>> {
     const path = `krdict/v1/romanization?query=${encodeURI(koreanName)}`
     const method: Method = 'GET'
@@ -88,6 +136,16 @@ export class PAPAGO {
     return this.client.request<PapagoKoreanNameRomanizerReturnType>(apiRequest, serviceError)
   }
 
+  /**
+   * Parameter validation for translation Service. 
+   * It provides source / target validations with languagesupports, and text validation for length allowable by service.
+   * @access private
+   * @param {string} source - text's language which want to translate.
+   * @param {string} target - language which want to be translated.
+   * @param {string} text - text which want to be translated.
+   * @returns {ServiceError | undefined} return ServiceError of each error if parameter violate API rules.
+   * @memberof PAPAGO
+   */
   private languageSupportValidation(source: string, target: string, text: string): ServiceError | undefined {
     // get all Support Languages for translation api 
     const languageSupports: string[] = Object.values(PAPAGOlanguages)
@@ -102,12 +160,28 @@ export class PAPAGO {
     return undefined
   }
   
+  /**
+   * Parameter validation for translation Service. 
+   * It provides text validation for length allowable by service.
+   * @access private
+   * @param {string} text - text which want to detect language.
+   * @returns {ServiceError | undefined} return ServiceError of each error if parameter violate API rules.
+   * @memberof PAPAGO
+   */
   private detectLanguageValidation(text: string): ServiceError | undefined {
     // for detectLanguage, text parameter is needed
     if (text.length === 0) return new ServiceError("Text parameter is needed, please check it")
     return undefined
   }
 
+  /**
+   * Parameter validation for translation Service. 
+   * It provides name string validation for length, rules allowable by service by regex.
+   * @access private
+   * @param {string} name - koreanName which is to be romanized.
+   * @returns {ServiceError | undefined} return ServiceError of each error if parameter violate API rules.
+   * @memberof PAPAGO
+   */
   private koreanNameRomanizerValidation(name: string): ServiceError | undefined {
     // for koreanNameRomanazier, name parameter is needed and is to be only korean
     if (name.length === 0) return new ServiceError("KoreanName parameter is needed, please check it")

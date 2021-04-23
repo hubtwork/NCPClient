@@ -89,12 +89,22 @@ type MessageResultType = {
   telcoCode: string
 }
 
-
-
+/**
+ * PapagoTranslationReturnType
+ * 
+ * @memberof PAPAGO
+ * @alias PapagoTranslationReturnType
+ */
 export type PapagoTranslationReturnType = {
   message: PapagoTranslationMessageType
 }
 
+/**
+ * PapagoTranslationMessageType
+ * 
+ * @memberof PapagoTranslationReturnType
+ * @alias PapagoTranslationMessageType
+ */
 type PapagoTranslationMessageType = {
   '@type': string,
   '@service': string,
@@ -102,25 +112,55 @@ type PapagoTranslationMessageType = {
   result: PapagoTranslationResultType
 }
 
+/**
+ * PapagoTranslationResultType
+ * 
+ * @memberof PapagoTranslationMessageType
+ * @alias PapagoTranslationResultType
+ */
 type PapagoTranslationResultType = {
   srcLangType: string
   tarLangType: string
   translatedText: string
 }
 
+/**
+ * PapagoDetectLanguageReturnType
+ * 
+ * @memberof PAPAGO
+ * @alias PapagoDetectLanguageReturnType
+ */
 export type PapagoDetectLanguageReturnType = {
   langCode: string
 }
 
+/**
+ * PapagoKoreanNameRomanizerReturnType
+ * 
+ * @memberof PAPAGO
+ * @alias PapagoKoreanNameRomanizerReturnType
+ */
 export type PapagoKoreanNameRomanizerReturnType = {
   aResult : PapagoKoreanNameRomanizerResultType[]
 }
 
+/**
+ * PapagoKoreanNameRomanizerResultType
+ * 
+ * @memberof PapagoKoreanNameRomanizerReturnType
+ * @alias PapagoKoreanNameRomanizerResultType
+ */
 type PapagoKoreanNameRomanizerResultType = {
   sFirstName: string
   aItems: PapagoKoreanNameRomanizerItemType[]
 }
 
+/**
+ * PapagoKoreanNameRomanizerItemType
+ * 
+ * @memberof PapagoKoreanNameRomanizerResultType
+ * @alias PapagoKoreanNameRomanizerItemType
+ */
 type PapagoKoreanNameRomanizerItemType = {
   name: string
   score: string

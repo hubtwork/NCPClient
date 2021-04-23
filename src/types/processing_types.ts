@@ -1,5 +1,10 @@
 
-
+/**
+ * PAPAGOlanguageSupports
+ * 
+ * @memberof languageSupportValidation
+ * @alias PAPAGOlanguageSupports
+ */
 export const PAPAGOlanguageSupports = {
   ko: ['en', 'ja', 'zh-CN', 'zh-TW', 'vi', 'id', 'th', 'de', 'ru', 'es', 'it', 'fr'],
   en: ['ko', 'ja', 'fr', 'zh-CN', 'zh-TW'],
@@ -16,6 +21,12 @@ export const PAPAGOlanguageSupports = {
   fr: ['ko', 'en']
 }
 
+/**
+ * PAPAGOlanguages
+ * 
+ * @memberof languageSupportValidation
+ * @alias PAPAGOlanguages
+ */
 export enum PAPAGOlanguages {
   korean = 'ko',
   english = 'en',
