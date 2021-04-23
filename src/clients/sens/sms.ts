@@ -7,7 +7,7 @@ import { generateApiSignature } from "../../utils/helper"
 
 export class SMS {
   /**
-   * The account access Key for API authentication
+   * The ApiClient for working with http request
    * 
    * @access private 
    * @type {ApiClient} 
@@ -49,7 +49,7 @@ export class SMS {
   ) {
     this.smsAuth = smsAuth
     this.ncpAuthKey = ncpAuthKey
-    this.client = new ApiClient(ncpAuthKey, baseUrl)
+    this.client = new ApiClient(baseUrl)
     
   }
   /**

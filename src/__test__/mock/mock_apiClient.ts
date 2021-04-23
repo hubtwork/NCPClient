@@ -1,27 +1,24 @@
 import axios, { AxiosResponse, Method } from 'axios'
-import { NCPAuthKeyType } from '../../types/auth_types'
 import { ApiClientResponse } from '../../types/return_types'
+import { ServiceError } from '../../utils/errors'
 
 export class MockApiClient {
-  
-  public readonly ncpAuthKey: NCPAuthKeyType
 
   private baseURL: string
   private timeout: number
 
   constructor(
-    ncpAuthKey: NCPAuthKeyType,
     baseURL: string,
     timeout: number = 2000
   )
   {
-    this.ncpAuthKey = ncpAuthKey
     this.baseURL = baseURL
     this.timeout = timeout
   }
 
-  public async request<T>(apiRequest: ApiRequest): Promise<ApiClientResponse<T>> {
+  public async request<T>(apiRequest: ApiRequest, serviceError?: ServiceError): Promise<ApiClientResponse<T>> {
     try {
+      if (serviceError) throw serviceError
       const val = await this.createRequest<T>(apiRequest)
       return {
         isSuccess: true,

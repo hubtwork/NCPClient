@@ -1,7 +1,7 @@
 
 /**
  * NCPAuthKeyType
- * @memberof NCPClient
+ * @memberof SENS
  * @alias NCPAuthKeyType
  */
  export type NCPAuthKeyType = {
@@ -40,3 +40,12 @@ export type SMSserviceAuthType = {
   signature: string
 }
 
+/**
+ * NaverOpenApiAuthType
+ * @memberof NaverOpenAPI
+ * @alias NaverOpenApiAuthType
+ */
+export type NaverOpenApiAuthType = {
+  clientId: string
+  clientSecret: string
+}

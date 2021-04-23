@@ -1,5 +1,4 @@
 const axios = require('axios')
-import { NCPAuthKeyType } from '../types/auth_types'
 import { MockApiClient, ApiRequest } from './mock/mock_apiClient'
 
 type testDataType = {
@@ -10,14 +9,13 @@ jest.mock("axios")
 
 describe('ApiClient TestSuite', () => {
   let client: MockApiClient
-  let ncpAuthKey: NCPAuthKeyType
 
   beforeAll(() => {
     const ncpAuthKey = {
       accessKey: "accessKey",
       secretKey: "secretKey"
     }
-    client = new MockApiClient( ncpAuthKey, 'http://api.test.com', 2000 )
+    client = new MockApiClient('http://api.test.com', 2000 )
   })
 
   beforeEach(() => axios.mockClear())
@@ -25,7 +23,7 @@ describe('ApiClient TestSuite', () => {
   test('create ApiClient', () => {
     expect(
       () =>
-      new MockApiClient( ncpAuthKey, 'http://api.test.com', 2000 )
+      new MockApiClient('http://api.test.com', 2000 )
     ).not.toThrow()
   })
 

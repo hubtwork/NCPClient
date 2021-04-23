@@ -6,7 +6,7 @@ export class SENS {
   
   private baseUrl: string = BaseURL.sens
   /**
-   * Get SendSMS Service agent.
+   * Get SENS Service agent.
    * @access public
    * @param {NCPAuthKeyType} ncpAuthKey NCP API authentication data for using API
    * @param {SMSserviceAuthType} smsAuth Service identification for using SMS Service
