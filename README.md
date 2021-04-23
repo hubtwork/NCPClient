@@ -40,7 +40,7 @@ $ npm install ncp-client
 #### Import API Wrapper
 
 ~~~javascript
-var { SENS } = require('ncp-client')
+var { SENS, PAPAGO } = require('ncp-client')
 ~~~
 
 #### [ SENS ] SMS API
@@ -118,6 +118,70 @@ const smsService = sens.smsService(ncpAuthKey, smsAuthKey)
   }
   ~~~
 
+
+#### [ NaverOpenAPI ] Papago NMT API
+
+- **Common**
+
+~~~javascript
+// type your NaverOpenAPI Client key pair
+let openApiClientAuth = {
+    clientId: 'clientId',
+    clientSecret: 'clientSecret'
+}
+// create NaverOpenAPI api container and get papagoService agent.
+const naverOpenAPI = new NaverOpenAPI()
+const papagoClient = naverOpenAPI.papagoService(openApiClientAuth)
+~~~
+
+- **Translation**
+
+  ~~~javascript
+  async function translation() {
+      const src = 'sourceLanguage'
+      const target = 'targetLanguage'
+      const text = 'text want to translate'
+      const { isSuccess, data, errorMessage } = await papagoClient.translation(src, target, text)
+      // write something after async function
+      if (isSuccess) {
+          // do something with data
+      } else {
+          // handle with errorMessage
+      }
+  }
+  ~~~
+
+- **Language Detection**
+
+  ~~~javascript
+  async function detectLanguage() {
+    	const text = 'text want to detect language'
+      const { isSuccess, data, errorMessage } = await papagoClient.detectLanguage(text)
+      // write something after async function
+      if (isSuccess) {
+          // do something with data
+      } else {
+          // handle with errorMessage
+      }
+  }
+  ~~~
+
+- **Korean Name Romanizer**
+
+  ~~~javascript
+  async function koreanNameRomanizer() {
+    	const name = 
+      const { isSuccess, data, errorMessage } = await papagoClient.koreanNameRominizer(name)
+    	// write something after async function
+      if (isSuccess) {
+          console.log(data.aResult[0].sFirstName) // firstName
+          console.log(data.aResult[0].aItems)	// aItems
+      } else {
+          // handle with errorMessage
+      }
+  }
+  ~~~
+
   
 
 ## Types 
@@ -126,14 +190,19 @@ const smsService = sens.smsService(ncpAuthKey, smsAuthKey)
 
 Based on Typescript's type alias, several types for api are declared. At this step, you can only show what you will use at each usage.
 
-**Common**
+**Common & Authentification**
 
 ~~~typescript
-// NCP api authentication key
+// NCP api authentication key pair
 type NCPAuthKeyType = {
-  // `accessKey` and `secretKey` are access key of 
   accessKey: string
   secretKey: string
+}
+
+// Naver Open API client key pair
+export type NaverOpenApiAuthType = {
+  clientId: string
+  clientSecret: string
 }
 
 // Common return value for all NCP api request
@@ -146,75 +215,129 @@ type ApiClientResponse<T> = {
 }
 ~~~
 
-**Send SMS**
+#### ( SENS ) SMS
 
-~~~typescript
-type SendSMSParamType = {
-  // `to` is recipient's phone number
-  to:           string
-  // `content` is text content what you want to send
-  content:      string
-}
+- **Send SMS**
 
-type SendSMSReturnType = {
-  // `statusCode` and `statusText` are the HTTP status code / message from the server response
-  statusCode: string
-  statusText: string
-  // `requestId` represents current succesful request's key, `requestTime` represents Datetime string
-  requestId:   string
-  requestTime: string
-}
-~~~
+  ~~~typescript
+  type SendSMSParamType = {
+    // `to` is recipient's phone number
+    to:	string
+    // `content` is text content what you want to send
+    content:	string
+  }
+  
+  type SendSMSReturnType = {
+    // `statusCode` and `statusText` are the HTTP status code / message from the server response
+    statusCode: string
+    statusText: string
+    // `requestId` represents current succesful request's key, `requestTime` represents Datetime string
+    requestId:	string
+    requestTime: string
+  }
+  ~~~
 
-**Search message delivery request**
+- **Search message delivery request**
 
-~~~typescript
-export type SearchMessageRequestReturnType = {
-  requestId: string
-  statusCode: string
-  statusName: string
-  // `messages` contains messages associated with requestId
-  messages: MessageRequestType[]
-}
-// Each message's summary
-type MessageRequestType = {
-  messageId: string
-  requestTime: string
-  contentType: string
-  countryCode: string
-  from: string
-  to: string
-}
-~~~
+  ~~~typescript
+  export type SearchMessageRequestReturnType = {
+    requestId: string
+    statusCode: string
+    statusName: string
+    // `messages` contains messages associated with requestId
+    messages: MessageRequestType[]
+  }
+  // Each message's summary
+  type MessageRequestType = {
+    messageId: string
+    requestTime: string
+    contentType: string
+    countryCode: string
+    from: string
+    to: string
+  }
+  ~~~
 
-**Search message delivery results**
+- **Search message delivery results**
 
-~~~typescript
-export type SearchMessageResultReturnType = {
-  statusCode: string
-  statusName: string
-  // `messages` contains messages associated with messageId
-  messages: MessageResultType[]
-}
-// Each message's detail
-type MessageResultType = {
-  requestTime: string
-  // `contentType` will be 'COMM' | 'AD', but currently not supported with AD message api
-  contentType: string
-  content: string
-  countryCode: string
-  from: string
-  to: string
-  status: string
-  statusCode: string
-  statusMessage: string
-  statusName: string
-  // `completeTime` means the time when request completed
-  completeTime: string
-  // `telcoCode` means telecommunication Provider Info
-  telcoCode: string
-}
-~~~
+  ~~~typescript
+  export type SearchMessageResultReturnType = {
+    statusCode: string
+    statusName: string
+    // `messages` contains messages associated with messageId
+    messages: MessageResultType[]
+  }
+  // Each message's detail
+  type MessageResultType = {
+    requestTime: string
+    // `contentType` will be 'COMM' | 'AD', but currently not supported with AD message api
+    contentType: string
+    content: string
+    countryCode: string
+    from: string
+    to: string
+    status: string
+    statusCode: string
+    statusMessage: string
+    statusName: string
+    // `completeTime` means the time when request completed
+    completeTime: string
+    // `telcoCode` means telecommunication Provider Info
+    telcoCode: string
+  }
+  ~~~
+
+#### ( NaverOpenAPI ) Papago NMT
+
+- **Translation**
+
+  ~~~typescript
+  export type PapagoTranslationReturnType = {
+    message: PapagoTranslationMessageType
+  }
+  type PapagoTranslationMessageType = {
+    // current Papago NMT responses
+    '@type': string,
+    '@service': string,
+    '@version': string,
+    result: PapagoTranslationResultType
+  }
+  // translation Report
+  type PapagoTranslationResultType = {
+    srcLangType: string
+    tarLangType: string
+    translatedText: string
+  }
+  ~~~
+
+- **Language Detection**
+
+  ~~~typescript
+  export type PapagoDetectLanguageReturnType = {
+    // detected language code from api
+    langCode: string
+  }
+  ~~~
+
+- **Korean Name Romanizer**
+
+  ~~~typescript
+  export type PapagoKoreanNameRomanizerReturnType = {
+    aResult : PapagoKoreanNameRomanizerResultType[]
+  }
+  type PapagoKoreanNameRomanizerResultType = {
+    // detected firstName
+    sFirstName: string
+    // array of romanized names
+    aItems: PapagoKoreanNameRomanizerItemType[]
+  }
+  type PapagoKoreanNameRomanizerItemType = {
+    // romanized korean name
+    name: string
+    // frequency integer values
+    score: string
+  }
+  ~~~
 
 
 
@@ -241,6 +364,12 @@ API Response status provided by Naver Cloud Platform
 - **Send SMS**
 - **Search message delivery request**
 - **Search message delivery results**
+
+#### (NaverOpenAPI) Papago NMT API v1
+
+- **Translation**
+- **Language Detection**
+- **Korean Name Romanizer**
 
 
 

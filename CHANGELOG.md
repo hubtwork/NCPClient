@@ -1,14 +1,16 @@
 ## Changes
 
-## v1.0.6 
+#### v1.1.0 ( 2021. 4. 23 )
+
+- Adding support for `NaverOpenAPI` 's `Papago NMT API v1`
+
+- Migrating  `Papago NMT API v1` 's service errors to built-in validation
 
 
 
+#### v1.0.5 ( 2021. 4. 20 )
 
-
-## v1.0.5 ( 2021. 4. 20 )
-
-#### NCPClient will support service's unique error types
+**NCPClient will support service's unique error types**
 
 - NCPClient's request module, `ApiRequest` can handle service's unique errors now
 
@@ -16,7 +18,7 @@
   >
   > If given parameter is incorrect with NCP-defined format, It will return **ApiClientResponse with error** and request won't send.
 
-#### [ SENS - SMS service ] SearchMessageRequest / SearchMessageResult now supported
+**[ SENS - SMS service ] SearchMessageRequest / SearchMessageResult now supported**
 
 - Using **SendSMS API** , you can get `requestId` of request from response
 
@@ -32,20 +34,20 @@
   const { isSuccess, data } = await smsService.searchMessageResult('messageId')
   ~~~
 
-#### Dependency changed
+**Dependency changed**
 
 - **crypto** changed to built-in module, so deprecated in dependency
 
 
 
-## v1.0.4 ( 2021. 4. 18 )
+#### v1.0.4 ( 2021. 4. 18 )
 
-#### ApiRequest clarity guaranteed
+**ApiRequest clarity guaranteed**
 
 - `ApiRequest` will be used more clearly to request **http requests**
 - `ApiRequest` represent **root Interface that defines the configuration** for the request
 
-#### ApiClient, the request Wrapper added
+**ApiClient, the request Wrapper added**
 
 - After this updates, no pure `axiosInstance.request` will be used
 
@@ -65,12 +67,12 @@
   }
   ~~~
 
-#### [ SENS - SMS service ] SendSMS support Multi-mode
+**[ SENS - SMS service ] SendSMS support Multi-mode**
 
 - `sendSMS` will support **sending SMS to multiple people**
 - User can pass param `SendSMSParamType[]` if want to send to multiple SMS at the same time
 
-#### Ensure API Service scalability 
+**Ensure API Service scalability**
 
   - Other NCP API Service will be added continuously, so consider **scalability**.
 
