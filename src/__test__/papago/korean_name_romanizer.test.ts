@@ -64,19 +64,135 @@ describe('PAPAGO.KoreanNameRomanizer TestSuite', () => {
 
   })
 
-  test('Invalid Request with empty source', async () => {
+  test('Invalid Request with empty name', async () => {
     axios.mockImplementationOnce(() =>
       Promise.reject()
     )
     
-    const source = ''
-    const target = 'en'
-    const text = '이게 진짜 된다고?'
+    const name = ""
 
-    const response = await client.translation(source, target, text)
+    const response = await client.koreanNameRominizer(name)
     expect(response.isSuccess).toEqual(false)
-    expect(response.errorMessage).toEqual('Source parameter is needed, please check it')
+    expect(response.errorMessage).toEqual('KoreanName parameter is needed, please check it')
   })
+
+  test('Invalid Request with no-korean name', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject()
+    )
+    
+    const name = "hubtwork"
+
+    const response = await client.koreanNameRominizer(name)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Only full Korean name parameter with no white space is allowed, please check it')
+  })
+
+  test('Invalid Request with Korean name with whitespaces', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject()
+    )
+    
+    const name = "허 재"
+
+    const response = await client.koreanNameRominizer(name)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Only full Korean name parameter with no white space is allowed, please check it')
+  })
+
+  test('Invalid Request with invalid Authentication', async () => {
+    
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 401,
+          statusText: 'Authentication Failed'
+        }
+      })
+    )
+
+    const wrongAuth = <NaverOpenApiAuthType>{
+      clientId: "wrongClientId",
+      clientSecret: "wrongClientSecret"
+    }
+
+    client = new MockPAPAGO('http://papago.test.com', wrongAuth)
+    
+    const name = "허재"
+    
+    const response = await client.koreanNameRominizer(name)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 401')
+  })
+
+  test('Invalid Request with exceeding 10MB name parameter', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 413,
+          statusText: 'Request Entity Too Large'
+        }
+      })
+    )
+    
+    const name = "십메가바이트가넘어가는이름"
+
+    const response = await client.koreanNameRominizer(name)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 413')
+  })
+
+  test('Invalid Request with account with quota limit exceeded', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 429,
+          statusText: 'Quota Exceeded'
+        }
+      })
+    )
+    
+    const name = "허재"
+
+    const response = await client.koreanNameRominizer(name)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 429')
+  })
+
+  test('Invalid Request with account with throttle limit exceeded', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 429,
+          statusText: 'Throttle Limited'
+        }
+      })
+    )
+    
+    const name = "허재"
+
+    const response = await client.koreanNameRominizer(name)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 429')
+  })
+
+  test('Invalid Request with account with rate limit exceeded', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 429,
+          statusText: 'Rate Limited'
+        }
+      })
+    )
+    
+    const name = "허재"
+
+    const response = await client.koreanNameRominizer(name)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 429')
+  })
+
 
 
 })

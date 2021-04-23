@@ -98,7 +98,7 @@ export class PAPAGO {
     else if (source === target) return new ServiceError("Source and target are identical, please check it")
     else if (!(Object.entries(PAPAGOlanguageSupports).filter(function (s) { return s[0] === source }).map(function (s) { return s[1] })[0].includes(target))) return new ServiceError("There is no source–to-target translator, please check it")
     else if (text.length === 0) return new ServiceError("Text parameter is needed, please check it")
-    else if (target.length > 5000) return new ServiceError("Text parameter exceeds the maximum length, please check it")
+    else if (text.length > 5000) return new ServiceError("Text parameter exceeds the maximum length, please check it")
     return undefined
   }
   
@@ -111,7 +111,7 @@ export class PAPAGO {
   private koreanNameRomanizerValidation(name: string): ServiceError | undefined {
     // for koreanNameRomanazier, name parameter is needed and is to be only korean
     if (name.length === 0) return new ServiceError("KoreanName parameter is needed, please check it")
-    else if (name.match(/^[가-힣]+$/) != null) return new ServiceError("Only full Korean name parameter with no white space is allowed, please check it")
+    else if (!((/^[가-힣]+$/).test(name))) return new ServiceError("Only full Korean name parameter with no white space is allowed, please check it")
     return undefined
   }
 

@@ -149,6 +149,26 @@ describe('PAPAGO.Translation TestSuite', () => {
     expect(response.errorMessage).toEqual('Text parameter is needed, please check it')
   })
 
+  test('Invalid Request with text exceeding 5000 characters', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 413,
+          statusText: 'Request Entity Too Large'
+        }
+      })
+    )
+    
+
+    const source = 'ko'
+    const target = 'en'
+    const text = "Dummy Text-exceeded with 5000 characters-length".repeat(5000)
+    
+    const response = await client.translation(source, target, text)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Text parameter exceeds the maximum length, please check it')
+  })
+
   test('Invalid Request with invalid Authentication', async () => {
     
     axios.mockImplementationOnce(() =>
@@ -174,6 +194,63 @@ describe('PAPAGO.Translation TestSuite', () => {
     const response = await client.translation(source, target, text)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 401')
+  })
+
+  test('Invalid Request with account with quota limit exceeded', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 429,
+          statusText: 'Quota Exceeded'
+        }
+      })
+    )
+    
+    const source = 'ko'
+    const target = 'en'
+    const text = '이게 진짜 된다고?'
+    
+    const response = await client.translation(source, target, text)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 429')
+  })
+
+  test('Invalid Request with account with throttle limit exceeded', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 429,
+          statusText: 'Throttle Limited'
+        }
+      })
+    )
+    
+    const source = 'ko'
+    const target = 'en'
+    const text = '이게 진짜 된다고?'
+    
+    const response = await client.translation(source, target, text)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 429')
+  })
+
+  test('Invalid Request with account with rate limit exceeded', async () => {
+    axios.mockImplementationOnce(() =>
+      Promise.reject({
+        response: {
+          status: 429,
+          statusText: 'Rate Limited'
+        }
+      })
+    )
+    
+    const source = 'ko'
+    const target = 'en'
+    const text = '이게 진짜 된다고?'
+    
+    const response = await client.translation(source, target, text)
+    expect(response.isSuccess).toEqual(false)
+    expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 429')
   })
 
 })
