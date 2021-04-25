@@ -1,5 +1,11 @@
 ## Changes
 
+#### v1.1.1 ( 2021. 4. 26)
+
+- Readme typing error fixed
+
+
+
 #### v1.1.0 ( 2021. 4. 23 )
 
 - Adding support for `NaverOpenAPI` 's `Papago NMT API v1`

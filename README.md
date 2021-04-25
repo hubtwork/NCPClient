@@ -170,7 +170,7 @@ const papagoClient = naverOpenAPI.papagoService(openApiClientAuth)
 
   ~~~javascript
   async function koreanNameRomanizer() {
-    	const name = 
+    	const name = 'korean name'
       const { isSuccess, data, errorMessage } = await papagoClient.koreanNameRominizer(name)
     	// write something after async function
       if (isSuccess) {
