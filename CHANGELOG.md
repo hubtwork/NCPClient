@@ -1,5 +1,9 @@
 ## Changes
 
+#### v1.1.2 ( 2021. 5. 1)
+
+- can import SMS, PAPAGO class for more typescrypty usage
+
 #### v1.1.1 ( 2021. 4. 26)
 
 - Readme typing error fixed
