@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, Method } from 'axios'
-import { ApiClientResponse } from '../../types/return_types'
+import { ApiClientResponse, PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType } from '../../types/return_types'
+import { ResponseTranslator, SupportedServices } from '../../types/service_translator'
 import { ServiceError } from '../../utils/errors'
 
 export class MockApiClient {
@@ -16,13 +17,15 @@ export class MockApiClient {
     this.timeout = timeout
   }
 
-  public async request<T>(apiRequest: ApiRequest, serviceError?: ServiceError): Promise<ApiClientResponse<T>> {
+  public async request<T extends object, P extends object>(apiRequest: ApiRequest, serviceError?: ServiceError): Promise<ApiClientResponse<T, P>> {
     try {
       if (serviceError) throw serviceError
       const val = await this.createRequest<T>(apiRequest)
+      const preprocessed = this.preprocessingServerResponse(val, apiRequest) as P
       return {
         isSuccess: true,
-        data: val
+        data: val,
+        preprocessed: preprocessed
       }
     } catch (error) {
       return {
@@ -74,6 +77,19 @@ export class MockApiClient {
     var res = url.match(/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/)
     return (res !== null)
   }
+
+  private preprocessingServerResponse(val: object, apiRequest: ApiRequest) {
+    switch(apiRequest.service) {
+      case SupportedServices.PAPAGO_TRANSLATION:
+        return ResponseTranslator.papagoTranslation(val as PapagoTranslationReturnType)
+      case SupportedServices.PAPAGO_LANGUAGE_DETECTION:
+        return ResponseTranslator.papagoLanguageDetection(val as PapagoDetectLanguageReturnType)
+      case SupportedServices.PAPAGO_KOREAN_NAME_ROMANIZER:
+        return ResponseTranslator.papagoKoreanNameRomanizer(val as PapagoKoreanNameRomanizerReturnType)
+      default : 
+        return {}
+    }
+  }
 }
 
 export interface ApiRequest {
@@ -81,6 +97,8 @@ export interface ApiRequest {
   method:   Method
   headers: { [key: string]: string }
   body?:     { [key: string]: any }
+
+  service?: SupportedServices
 }
 
 

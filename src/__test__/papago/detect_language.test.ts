@@ -2,6 +2,7 @@ const axios = require('axios')
 import { MockPAPAGO } from '../mock/mock_papago'
 import { NaverOpenApiAuthType } from '../../types/auth_types'
 import { PapagoDetectLanguageReturnType } from '../../types/return_types'
+import { PAPAGO_preprocessed_LanguageDetction } from '../../types/processing_types'
 
 jest.mock('axios')
 
@@ -38,9 +39,13 @@ describe('PAPAGO.DetectLanguage TestSuite', () => {
     expect(response.isSuccess).toEqual(true)
     if (response.data) {
       console.log('data detected')
-      const data: PapagoDetectLanguageReturnType = response.data || undefined
+      const data: PapagoDetectLanguageReturnType = response.data
       expect(data !== undefined).toEqual(true)
       expect(data.langCode === 'ko').toEqual(true)
+    }
+    if (response.preprocessed) {
+      console.log('preprocessed complete')
+      const preprocessed = response.preprocessed
     }
 
   })

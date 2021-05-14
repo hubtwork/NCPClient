@@ -6,9 +6,10 @@
  * @memberof ApiClient
  * @alias ApiClientResponse
  */
-export type ApiClientResponse<T> = {
+export type ApiClientResponse<T, P> = {
   isSuccess: boolean
   data?: T
+  preprocessed?: P
   errorMessage?: {}
 }
 

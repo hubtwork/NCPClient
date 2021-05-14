@@ -42,3 +42,34 @@ export enum PAPAGOlanguages {
   italian = 'it',
   french = 'fr'
 }
+
+
+export type SENS_preprocessed_SendSMS = {
+  result: string,
+  requestId: string
+}
+
+export type SENS_preprocessed_SearchMessageRequest = {
+  result: string,
+  requestId: string,
+  messageIds: string[]
+}
+
+export type SENS_preprocessed_SearchMessageResult = {
+  
+}
+
+export type PAPAGO_preprocessed_Translation = {
+  source: string,
+  target: string,
+  translated: string
+}
+
+export type PAPAGO_preprocessed_LanguageDetction = {
+  detected: string
+}
+
+export type PAPAGO_preprocessed_KoreanNameRomanizer = {
+  firstName: string
+  bestMatched: object
+}
