@@ -30,22 +30,32 @@ describe('PAPAGO.DetectLanguage TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.resolve({
-        langCode: 'ko'
+        status: 200,
+        statusText: 'OK',
+        data : {
+          langCode: 'ko'
+        }
       })
     )
     const text = '이게 된다고?'
     
     const response = await client.detectLanguage(text)
     expect(response.isSuccess).toEqual(true)
+    // check response data parsing
+    expect(response.data !== null).toEqual(true)
     if (response.data) {
       console.log('data detected')
       const data: PapagoDetectLanguageReturnType = response.data
       expect(data !== undefined).toEqual(true)
       expect(data.langCode === 'ko').toEqual(true)
     }
+    // check response preprocessed data
+    expect(response.preprocessed !== null).toEqual(true)
     if (response.preprocessed) {
       console.log('preprocessed complete')
-      const preprocessed = response.preprocessed
+      const preprocessed: PAPAGO_preprocessed_LanguageDetction = response.preprocessed
+      expect(typeof preprocessed.detected).toBe('string')
+      expect(preprocessed.detected).toBe('ko')
     }
 
   })

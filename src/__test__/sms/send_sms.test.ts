@@ -3,6 +3,7 @@ import { MockSMS } from '../mock/mock_smsClient';
 import { SendSMSParamType } from '../../types/param_types';
 import { SendSMSReturnType } from '../../types/return_types';
 import { NCPAuthKeyType, SMSserviceAuthType } from '../../types/auth_types';
+import { SENS_preprocessed_SendSMS } from '../../types/processing_types';
 
 jest.mock('axios')
 
@@ -54,10 +55,14 @@ describe('Sms.SendSMS TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.resolve({
-        requestId: "8ac25d36c3f849c7b1ba1c705ce4e9e7",
-        requestTime: "2021-04-18T19:27:10.044",
-        statusCode: "202",
-        statusName: "success"
+        status: 200,
+        statusText: 'OK',
+        data : {
+          requestId: "8ac25d36c3f849c7b1ba1c705ce4e9e7",
+          requestTime: "2021-04-18T19:27:10.044",
+          statusCode: "202",
+          statusName: "success"
+        }
       })
     )
     
@@ -68,9 +73,19 @@ describe('Sms.SendSMS TestSuite', () => {
       const data: SendSMSReturnType = response.data || undefined
       expect(data !== undefined).toEqual(true)
       expect(data.statusCode).toEqual('202')
-      expect(data.statusText).toEqual('success')
+      expect(data.statusName).toEqual('success')
       expect(data.requestId !== undefined).toEqual(true)
       expect(data.requestTime !== undefined).toEqual(true)
+    }
+
+    expect(response.preprocessed).not.toBeNull()
+    if (response.preprocessed) {
+      console.log('preprocessd complete')
+      const preprocessed: SENS_preprocessed_SendSMS = response.preprocessed
+      expect(typeof preprocessed.result).toBe('string')
+      expect(preprocessed.result).toBe('success')
+      expect(typeof preprocessed.requestId).toBe('string')
+      expect(preprocessed.requestId).toBe('8ac25d36c3f849c7b1ba1c705ce4e9e7')
     }
   })
 
@@ -78,10 +93,14 @@ describe('Sms.SendSMS TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.resolve({
-        requestId: "8ac25d36c3f849c7b1ba1c705ce4e9e7",
-        requestTime: "2021-04-18T19:27:10.044",
-        statusCode: "202",
-        statusName: "success"
+        status: 200,
+        statusText: 'OK',
+        data : {
+          requestId: "8ac25d36c3f849c7b1ba1c705ce4e9e7",
+          requestTime: "2021-04-18T19:27:10.044",
+          statusCode: "202",
+          statusName: "success"
+        }
       })
     )
     
@@ -92,7 +111,7 @@ describe('Sms.SendSMS TestSuite', () => {
       const data: SendSMSReturnType = response.data || undefined
       expect(data !== undefined).toEqual(true)
       expect(data.statusCode).toEqual('202')
-      expect(data.statusText).toEqual('success')
+      expect(data.statusName).toEqual('success')
       expect(data.requestId !== undefined).toEqual(true)
       expect(data.requestTime !== undefined).toEqual(true)
     }

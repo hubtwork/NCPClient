@@ -1,3 +1,4 @@
+import { MessageResultType } from "./return_types"
 
 /**
  * PAPAGOlanguageSupports
@@ -56,7 +57,8 @@ export type SENS_preprocessed_SearchMessageRequest = {
 }
 
 export type SENS_preprocessed_SearchMessageResult = {
-  
+  result: string,
+  messages: MessageResultType[]
 }
 
 export type PAPAGO_preprocessed_Translation = {

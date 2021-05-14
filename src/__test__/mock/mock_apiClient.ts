@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, Method } from 'axios'
-import { ApiClientResponse, PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType } from '../../types/return_types'
+import { ApiClientResponse, PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType, SearchMessageRequestReturnType, SearchMessageResultReturnType, SendSMSReturnType } from '../../types/return_types'
 import { ResponseTranslator, SupportedServices } from '../../types/service_translator'
 import { ServiceError } from '../../utils/errors'
 
@@ -21,7 +21,9 @@ export class MockApiClient {
     try {
       if (serviceError) throw serviceError
       const val = await this.createRequest<T>(apiRequest)
+      console.log(val)
       const preprocessed = this.preprocessingServerResponse(val, apiRequest) as P
+      console.log(val, preprocessed)
       return {
         isSuccess: true,
         data: val,
@@ -80,6 +82,14 @@ export class MockApiClient {
 
   private preprocessingServerResponse(val: object, apiRequest: ApiRequest) {
     switch(apiRequest.service) {
+      // SMS
+      case SupportedServices.SENS_SEND_SMS:
+        return ResponseTranslator.sensSendSMS(val as SendSMSReturnType)
+      case SupportedServices.SENS_SEARCH_MESSAGE_REQUEST:
+        return ResponseTranslator.sensSearchMessageRequest(val as SearchMessageRequestReturnType)
+      case SupportedServices.SENS_SEARCH_MESSAGE_RESULT:
+        return ResponseTranslator.sensSearchMessageResult(val as SearchMessageResultReturnType)
+      // PAPAGO
       case SupportedServices.PAPAGO_TRANSLATION:
         return ResponseTranslator.papagoTranslation(val as PapagoTranslationReturnType)
       case SupportedServices.PAPAGO_LANGUAGE_DETECTION:

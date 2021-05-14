@@ -45,7 +45,7 @@ describe('ApiClient TestSuite', () => {
         'Content-Type': 'application/json; charset=utf-8'
       }
     }
-    const response = await client.request<testDataType>(apiRequest)
+    const response = await client.request<testDataType, object>(apiRequest)
     expect(response.isSuccess).toEqual(true)
     if (response.data) {
       const data: testDataType = response.data || undefined
@@ -74,7 +74,7 @@ describe('ApiClient TestSuite', () => {
         'Content-Type': 'application/json; charset=utf-8'
       }
     }
-    const response = await client.request<testDataType>(apiRequest)
+    const response = await client.request<testDataType, object>(apiRequest)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Unexpected HTTP Status Code : 404')
   })
@@ -95,7 +95,7 @@ describe('ApiClient TestSuite', () => {
         'Content-Type': 'application/json; charset=utf-8'
       }
     }
-    const response = await client.request<testDataType>(apiRequest)
+    const response = await client.request<testDataType, object>(apiRequest)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('No response from the server')
   })
@@ -115,7 +115,7 @@ describe('ApiClient TestSuite', () => {
         'Content-Type': 'application/json; charset=utf-8'
       }
     }
-    const response = await client.request<testDataType>(apiRequest)
+    const response = await client.request<testDataType, object>(apiRequest)
     expect(response.isSuccess).toEqual(false)
     expect(response.errorMessage).toEqual('Error occured during setup request')
   })

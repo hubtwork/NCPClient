@@ -2,6 +2,7 @@ const axios = require('axios')
 import { MockSMS } from '../mock/mock_smsClient';
 import { SearchMessageResultReturnType } from '../../types/return_types';
 import { NCPAuthKeyType, SMSserviceAuthType } from '../../types/auth_types';
+import { SENS_preprocessed_SearchMessageResult } from '../../types/processing_types';
 
 jest.mock('axios')
 
@@ -35,8 +36,9 @@ describe('SMS.SearchSmsResult TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.resolve({
-        isSuccess: true,
-        data: {
+        status: 200,
+        statusText: 'OK',
+        data : {
           statusCode: '202',
           statusName: 'success',
           messages: [ {
@@ -70,6 +72,15 @@ describe('SMS.SearchSmsResult TestSuite', () => {
       expect(data.messages[0].statusName).toEqual('success')
       expect(data.messages[0].requestTime.match(/(\d{4})-(\d{2})-(\d{2})(\s)(\d{2}):(\d{2}):(\d{2})/) !== null).toEqual(true)
       expect(data.messages[0].requestTime !== data.messages[0].completeTime).toEqual(true)
+    }
+
+    expect(response.preprocessed).not.toBeNull()
+    if (response.preprocessed) {
+      console.log('preprocessd complete')
+      const preprocessed: SENS_preprocessed_SearchMessageResult = response.preprocessed
+      expect(typeof preprocessed.result).toBe('string')
+      expect(preprocessed.result).toBe('success')
+      expect(preprocessed.messages.length).toBe(1)
     }
   })
 

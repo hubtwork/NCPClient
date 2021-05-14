@@ -1,5 +1,5 @@
 import { lstat } from "node:fs";
-import { PAPAGO_preprocessed_KoreanNameRomanizer, PAPAGO_preprocessed_LanguageDetction, PAPAGO_preprocessed_Translation, SENS_preprocessed_SearchMessageRequest, SENS_preprocessed_SendSMS } from "./processing_types";
+import { PAPAGO_preprocessed_KoreanNameRomanizer, PAPAGO_preprocessed_LanguageDetction, PAPAGO_preprocessed_Translation, SENS_preprocessed_SearchMessageRequest, SENS_preprocessed_SearchMessageResult, SENS_preprocessed_SendSMS } from "./processing_types";
 import { PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType, SearchMessageRequestReturnType, SearchMessageResultReturnType, SendSMSReturnType } from "./return_types";
 
 
@@ -22,7 +22,7 @@ export class ResponseTranslator {
     // SENS
     public static sensSendSMS(val: SendSMSReturnType): SENS_preprocessed_SendSMS {
         return {
-            result: val.statusCode,
+            result: val.statusName,
             requestId: val.requestId
         }
     }
@@ -33,7 +33,7 @@ export class ResponseTranslator {
             messageIds: val.messages.map(it => it.messageId)
         }
     }
-    public static sensSearchMessageResult(val: SearchMessageResultReturnType) {
+    public static sensSearchMessageResult(val: SearchMessageResultReturnType): SENS_preprocessed_SearchMessageResult {
         const messages = val.messages
         return {
             result: val.statusName,
@@ -52,7 +52,7 @@ export class ResponseTranslator {
     }
     public static papagoLanguageDetection(val: PapagoDetectLanguageReturnType): PAPAGO_preprocessed_LanguageDetction {
         return {
-            detected: val.langCode 
+            detected: val.langCode
         }
     }
     public static papagoKoreanNameRomanizer(val: PapagoKoreanNameRomanizerReturnType): PAPAGO_preprocessed_KoreanNameRomanizer {

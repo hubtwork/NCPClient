@@ -1,7 +1,7 @@
 import { Method } from "axios"
 import { NCPAuthKeyType, SMSserviceAuthType } from "../../types/auth_types"
 import { SendSMSParamType } from "../../types/param_types"
-import { SENS_preprocessed_SendSMS } from "../../types/processing_types"
+import { SENS_preprocessed_SearchMessageRequest, SENS_preprocessed_SearchMessageResult, SENS_preprocessed_SendSMS } from "../../types/processing_types"
 import { ApiClientResponse, SearchMessageRequestReturnType, SearchMessageResultReturnType, SendSMSReturnType } from "../../types/return_types"
 import { SupportedServices } from "../../types/service_translator"
 import { generateApiSignature } from "../../utils/helper"
@@ -58,7 +58,7 @@ export class MockSMS {
     return this.client.request<SendSMSReturnType, SENS_preprocessed_SendSMS>(apiRequest)
   }
 
-  public async searchMessageRequest(requestId: string): Promise<ApiClientResponse<SearchMessageRequestReturnType>> {
+  public async searchMessageRequest(requestId: string): Promise<ApiClientResponse<SearchMessageRequestReturnType, SENS_preprocessed_SearchMessageRequest>> {
     // construct path and method
     const path = `/sms/v2/services/${this.smsAuth.serviceId}/messages?requestId=${requestId}`
     const method: Method = 'GET'
@@ -73,12 +73,14 @@ export class MockSMS {
     const apiRequest: ApiRequest = {
       path: path,
       method: method,
-      headers: headers
+      headers: headers,
+
+      service: SupportedServices.SENS_SEARCH_MESSAGE_REQUEST
     }
-    return this.client.request<SearchMessageRequestReturnType>(apiRequest)
+    return this.client.request<SearchMessageRequestReturnType, SENS_preprocessed_SearchMessageRequest>(apiRequest)
   }
 
-  public async searchMessageResult(messageId: string): Promise<ApiClientResponse<SearchMessageResultReturnType>> {
+  public async searchMessageResult(messageId: string): Promise<ApiClientResponse<SearchMessageResultReturnType, SENS_preprocessed_SearchMessageResult>> {
     // construct path and method
     const path = `/sms/v2/services/${this.smsAuth.serviceId}/messages/${messageId}`
     const method: Method = 'GET'
@@ -93,9 +95,11 @@ export class MockSMS {
     const apiRequest: ApiRequest = {
       path: path,
       method: method,
-      headers: headers
+      headers: headers,
+
+      service: SupportedServices.SENS_SEARCH_MESSAGE_RESULT
     }
-    return this.client.request<SearchMessageResultReturnType>(apiRequest)
+    return this.client.request<SearchMessageResultReturnType, SENS_preprocessed_SearchMessageResult>(apiRequest)
   }
 
 

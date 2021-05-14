@@ -2,6 +2,7 @@ const axios = require('axios')
 import { MockPAPAGO } from '../mock/mock_papago'
 import { NaverOpenApiAuthType } from '../../types/auth_types'
 import { PapagoKoreanNameRomanizerReturnType } from '../../types/return_types'
+import { PAPAGO_preprocessed_KoreanNameRomanizer } from '../../types/processing_types'
 
 jest.mock('axios')
 
@@ -29,30 +30,36 @@ describe('PAPAGO.KoreanNameRomanizer TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.resolve({
-        aResult: [
-          {
-            sFirstName: '허',
-            aItems: [
-              { name: 'Heo Jae', score: '100' },
-              { name: 'Huh Jae', score: '60' },
-              { name: 'Hur Jae', score: '45' },
-              { name: 'Hu Jae', score: '26' },
-              { name: 'Heo Je', score: '10' },
-              { name: 'Heo Jea', score: '10' },
-              { name: 'Huh Je', score: '6' },
-              { name: 'Huh Jea', score: '6' },
-              { name: 'Hur Je', score: '4' },
-              { name: 'Hur Jea', score: '4' }
-            ]
-          }
-        ]
+        status: 200,
+        statusText: 'OK',
+        data : {
+          aResult: [
+            {
+              sFirstName: '허 ',
+              aItems: [
+                { name: 'Heo Jae', score: '100' },
+                { name: 'Huh Jae', score: '60' },
+                { name: 'Hur Jae', score: '45' },
+                { name: 'Hu Jae', score: '26' },
+                { name: 'Heo Je', score: '10' },
+                { name: 'Heo Jea', score: '10' },
+                { name: 'Huh Je', score: '6' },
+                { name: 'Huh Jea', score: '6' },
+                { name: 'Hur Je', score: '4' },
+                { name: 'Hur Jea', score: '4' }
+              ]
+            }
+          ]
+        }
       })
     )
     
     const name = "허재"
-    
+      
     const response = await client.koreanNameRominizer(name)
     expect(response.isSuccess).toEqual(true)
+    // check response data parsing
+    expect(response.data !== null).toEqual(true)
     if (response.data) {
       console.log('data detected')
       const data: PapagoKoreanNameRomanizerReturnType = response.data || undefined
@@ -60,6 +67,15 @@ describe('PAPAGO.KoreanNameRomanizer TestSuite', () => {
       expect(data.aResult.length > 0).toEqual(true)
       expect(data.aResult[0].sFirstName.length > 0).toEqual(true)
       expect(data.aResult[0].aItems.length > 0).toEqual(true)
+    }
+    // check response preprocessed data
+    expect(response.preprocessed !== null).toEqual(true)
+    if (response.preprocessed) {
+      console.log('preprocessed complete')
+      const preprocessed: PAPAGO_preprocessed_KoreanNameRomanizer = response.preprocessed
+      expect(typeof preprocessed.firstName).toBe('string')
+      expect(preprocessed.firstName).toBe('허 ')
+      expect(preprocessed.bestMatched).not.toBeNull()
     }
 
   })

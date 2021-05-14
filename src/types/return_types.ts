@@ -23,7 +23,7 @@ export type ApiClientResponse<T, P> = {
  */
  export type SendSMSReturnType = {
   statusCode:   string
-  statusText:   string
+  statusName:   string
   requestId:   string
   requestTime: string
 }
@@ -74,7 +74,7 @@ export type SearchMessageResultReturnType = {
  * @memberof SearchMessageResultReturnType
  * @alias MessageResultType
  */
-type MessageResultType = {
+export type MessageResultType = {
   requestTime: string
   contentType: string
   content: string
