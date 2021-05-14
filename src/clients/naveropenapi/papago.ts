@@ -1,9 +1,10 @@
 import { Method } from "axios"
 import { NaverOpenApiAuthType } from "../../types/auth_types"
 import { ApiClient, ApiRequest } from "../../utils/api_request"
-import { PAPAGOlanguages, PAPAGOlanguageSupports } from '../../types/processing_types'
+import { PAPAGOlanguages, PAPAGOlanguageSupports, PAPAGO_preprocessed_KoreanNameRomanizer, PAPAGO_preprocessed_LanguageDetction, PAPAGO_preprocessed_Translation } from '../../types/processing_types'
 import { ApiClientResponse, PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType } from "../../types/return_types"
 import { ServiceError } from "../../utils/errors"
+import { SupportedServices } from "../../types/service_translator"
 
 
 export class PAPAGO {
@@ -51,7 +52,7 @@ export class PAPAGO {
    * @returns {Promise<ApiClientResponse<PapagoTranslationReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
    * @memberof PAPAGO
    */
-  public async translation(source: string, target: string, text: string): Promise<ApiClientResponse<PapagoTranslationReturnType>> {
+  public async translation(source: string, target: string, text: string): Promise<ApiClientResponse<PapagoTranslationReturnType, PAPAGO_preprocessed_Translation>> {
     const path = 'nmt/v1/translation'
     const method: Method = 'POST'
     // construct signature and headers
@@ -69,11 +70,13 @@ export class PAPAGO {
       path: path,
       method: method,
       headers: headers,
-      body: body
+      body: body,
+
+      service: SupportedServices.PAPAGO_TRANSLATION
     }
 
     let serviceError: ServiceError | undefined = this.languageSupportValidation(source, target, text)
-    return this.client.request<PapagoTranslationReturnType>(apiRequest, serviceError)
+    return this.client.request<PapagoTranslationReturnType, PAPAGO_preprocessed_Translation>(apiRequest, serviceError)
   }
 
   /**
@@ -85,7 +88,7 @@ export class PAPAGO {
    * @returns {Promise<ApiClientResponse<PapagoDetectLanguageReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
    * @memberof PAPAGO
    */
-  public async detectLanguage(text: string): Promise<ApiClientResponse<PapagoDetectLanguageReturnType>> {
+  public async detectLanguage(text: string): Promise<ApiClientResponse<PapagoDetectLanguageReturnType, PAPAGO_preprocessed_LanguageDetction>> {
     const path = 'langs/v1/dect'
     const method: Method = 'POST'
     // construct signature and headers
@@ -101,11 +104,13 @@ export class PAPAGO {
       path: path,
       method: method,
       headers: headers,
-      body: body
+      body: body,
+
+      service: SupportedServices.PAPAGO_LANGUAGE_DETECTION
     }
 
     let serviceError: ServiceError | undefined = this.detectLanguageValidation(text)
-    return this.client.request<PapagoDetectLanguageReturnType>(apiRequest, serviceError)
+    return this.client.request<PapagoDetectLanguageReturnType, PAPAGO_preprocessed_LanguageDetction>(apiRequest, serviceError)
   }
 
   /**
@@ -117,7 +122,7 @@ export class PAPAGO {
    * @returns {Promise<ApiClientResponse<PapagoKoreanNameRomanizerReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
    * @memberof PAPAGO
    */
-  public async koreanNameRominizer(koreanName: string): Promise<ApiClientResponse<PapagoKoreanNameRomanizerReturnType>> {
+  public async koreanNameRominizer(koreanName: string): Promise<ApiClientResponse<PapagoKoreanNameRomanizerReturnType, PAPAGO_preprocessed_KoreanNameRomanizer>> {
     const path = `krdict/v1/romanization?query=${encodeURI(koreanName)}`
     const method: Method = 'GET'
     // construct signature and headers
@@ -129,11 +134,13 @@ export class PAPAGO {
     const apiRequest: ApiRequest = {
       path: path,
       method: method,
-      headers: headers
+      headers: headers,
+
+      service: SupportedServices.PAPAGO_KOREAN_NAME_ROMANIZER
     }
 
     let serviceError: ServiceError | undefined = this.koreanNameRomanizerValidation(koreanName)
-    return this.client.request<PapagoKoreanNameRomanizerReturnType>(apiRequest, serviceError)
+    return this.client.request<PapagoKoreanNameRomanizerReturnType, PAPAGO_preprocessed_KoreanNameRomanizer>(apiRequest, serviceError)
   }
 
   /**

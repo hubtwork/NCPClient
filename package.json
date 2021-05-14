@@ -1,6 +1,6 @@
 {
   "name": "ncp-client",
-  "version": "1.1.2a",
+  "version": "1.2.0",
   "description": "Naver Cloud Platform Applications' OpenAPI Wrapper built in TS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

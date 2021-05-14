@@ -2,6 +2,7 @@ const axios = require('axios')
 import { MockPAPAGO } from '../mock/mock_papago'
 import { NaverOpenApiAuthType } from '../../types/auth_types'
 import { PapagoTranslationReturnType } from '../../types/return_types'
+import { PAPAGO_preprocessed_Translation } from '../../types/processing_types'
 
 jest.mock('axios')
 
@@ -29,20 +30,26 @@ describe('PAPAGO.Translation TestSuite', () => {
     
     axios.mockImplementationOnce(() =>
       Promise.resolve({
-        '@type': 'response',
-        '@service': 'naverservice.nmt.proxy',
-        '@version': '1.0.0',
-        result: {
-          srcLangType: 'ko',
-          tarLangType: 'en',
-          translatedText: 'Really?'
+        status: 200,
+        statusText: 'OK',
+        data : {
+          message: {
+            '@type': 'response',
+            '@service': 'naverservice.nmt.proxy',
+            '@version': '1.0.0',
+            result: {
+              srcLangType: 'ko',
+              tarLangType: 'en',
+              translatedText: 'Really?'
+            }
+          }
         }
       })
     )
     
     const source = 'ko'
     const target = 'en'
-    const text = '이게 진짜 된다고?'
+    const text = '정말로?'
     
     const response = await client.translation(source, target, text)
     expect(response.isSuccess).toEqual(true)
@@ -52,10 +59,22 @@ describe('PAPAGO.Translation TestSuite', () => {
       expect(data !== undefined).toEqual(true)
       expect(data.message !== undefined).toEqual(true)
       expect(data.message['@type'] === 'response').toEqual(true)
-      expect(data.message['@service']).toEqual(true)
+      expect(data.message['@service']).toBe('naverservice.nmt.proxy')
       expect(data.message.result.srcLangType === source).toEqual(true)
       expect(data.message.result.tarLangType === target).toEqual(true)
       expect((data.message.result.srcLangType !== data.message.result.tarLangType) && (data.message.result.translatedText !== text)).toEqual(true)
+    }
+
+    expect(response.preprocessed).not.toBeNull()
+    if (response.preprocessed) {
+      console.log('preprocessd complete')
+      const preprocessed: PAPAGO_preprocessed_Translation = response.preprocessed
+      expect(typeof preprocessed.source).toBe('string')
+      expect(preprocessed.source).toBe('ko')
+      expect(typeof preprocessed.target).toBe('string')
+      expect(preprocessed.target).toBe('en')
+      expect(typeof preprocessed.translated).toBe('string')
+      expect(preprocessed.translated).toBe('Really?')
     }
 
   })

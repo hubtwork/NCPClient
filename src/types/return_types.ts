@@ -6,9 +6,10 @@
  * @memberof ApiClient
  * @alias ApiClientResponse
  */
-export type ApiClientResponse<T> = {
+export type ApiClientResponse<T, P> = {
   isSuccess: boolean
   data?: T
+  preprocessed?: P
   errorMessage?: {}
 }
 
@@ -22,7 +23,7 @@ export type ApiClientResponse<T> = {
  */
  export type SendSMSReturnType = {
   statusCode:   string
-  statusText:   string
+  statusName:   string
   requestId:   string
   requestTime: string
 }
@@ -73,7 +74,7 @@ export type SearchMessageResultReturnType = {
  * @memberof SearchMessageResultReturnType
  * @alias MessageResultType
  */
-type MessageResultType = {
+export type MessageResultType = {
   requestTime: string
   contentType: string
   content: string
