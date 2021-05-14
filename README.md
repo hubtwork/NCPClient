@@ -80,9 +80,10 @@ const smsService = sens.smsService(ncpAuthKey, smsAuthKey)
   
   async function sendMessage() {
     	// if you don't pass countryCode, default countryCode is 82.
-      const {isSuccess, data, errorMessage } = await smsService.sendSMS( sendSMSparam, countryCode )
+      const {isSuccess, data, preprocessed, errorMessage } = await smsService.sendSMS( sendSMSparam, countryCode )
       // write something after async function
       if (isSuccess) {
+        	const { result, requestId } = preprocessed
           // do something with data
       } else {
           // handle with errorMessage
@@ -93,10 +94,12 @@ const smsService = sens.smsService(ncpAuthKey, smsAuthKey)
 - **Search message delivery request**
 
   ~~~javascript
-  async function searchMessageDeliveryRequest() {
-      const {isSuccess, data, errorMessage } = await smsService.searchMessageRequest('requestId')
+  async function searchMessageDeliveryRequest(requestId: string) {
+      const {isSuccess, data, preprocessed, errorMessage } = await smsService.searchMessageRequest(requestId)
       // write something after async function
       if (isSuccess) {
+        	// messageIds: string[]
+        	const { result, requestId, messageIds } = preprocessed
           // do something with data
       } else {
           // handle with errorMessage
@@ -107,10 +110,12 @@ const smsService = sens.smsService(ncpAuthKey, smsAuthKey)
 - **Search message delivery results**
 
   ~~~javascript
-  async function searchMessageDeliveryResults() {
-      const {isSuccess, data, errorMessage } = await smsService.searchMessageResult('messageId')
+  async function searchMessageDeliveryResults(messageId: string) {
+      const {isSuccess, data, preprocessed, errorMessage } = await smsService.searchMessageResult(messageId)
       // write something after async function
       if (isSuccess) {
+        	// messages: MessageResultType[]
+        	const { result, messages } = preprocessed
           // do something with data
       } else {
           // handle with errorMessage
@@ -136,29 +141,27 @@ const papagoClient = naverOpenAPI.papagoService(openApiClientAuth)
 
 - **Translation**
 
-  ~~~javascript
-  async function translation() {
-      const src = 'sourceLanguage'
-      const target = 'targetLanguage'
-      const text = 'text want to translate'
-      const { isSuccess, data, errorMessage } = await papagoClient.translation(src, target, text)
+  ~~~typescript
+  async function translation(source: string, target: string, text: string) {
+      const { isSuccess, data, preprocessed, errorMessage } = await papagoClient.translation(src, target, text)
       // write something after async function
       if (isSuccess) {
+        	const { source, target, translated } = preprocessed
           // do something with data
       } else {
           // handle with errorMessage
       }
   }
   ~~~
-
+  
 - **Language Detection**
 
   ~~~javascript
-  async function detectLanguage() {
-    	const text = 'text want to detect language'
-      const { isSuccess, data, errorMessage } = await papagoClient.detectLanguage(text)
+  async function detectLanguage(text: string) {
+      const { isSuccess, data, preprocessed, errorMessage } = await papagoClient.detectLanguage(text)
       // write something after async function
       if (isSuccess) {
+        	const { detected } = preprocessed
           // do something with data
       } else {
           // handle with errorMessage
@@ -169,20 +172,19 @@ const papagoClient = naverOpenAPI.papagoService(openApiClientAuth)
 - **Korean Name Romanizer**
 
   ~~~javascript
-  async function koreanNameRomanizer() {
-    	const name = 'korean name'
-      const { isSuccess, data, errorMessage } = await papagoClient.koreanNameRominizer(name)
+  async function koreanNameRomanizer(koreanName: string) {
+      const { isSuccess, data, preprocessed, errorMessage } = await papagoClient.koreanNameRominizer(name)
     	// write something after async function
       if (isSuccess) {
-          console.log(data.aResult[0].sFirstName) // firstName
-          console.log(data.aResult[0].aItems)	// aItems
+        	const { firstName, bestMatched } = preprocessed
+        	// do something with data
       } else {
           // handle with errorMessage
       }
   }
   ~~~
-
   
+
 
 ## Types 
 

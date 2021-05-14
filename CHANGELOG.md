@@ -1,10 +1,32 @@
 ## Changes
 
-#### v1.1.2 ( 2021. 5. 1)
+#### v1.2.0 ( 2021. 5. 14 )
+
+- Add preprocessed data ([#4](https://github.com/Hubtwork/NCPClient/issues/4))
+
+  - preprocessed data will deliver simple, essentials to client
+
+  - add SENS sms services
+  - add PAPAGO services
+
+- Add test with bug fixed
+
+  - bug fix with mocked response for test
+  - test with preprocessed data
+  - test with latest
+
+- Update readme
+
+  - update readme with preprocessed data exmaple
+  - update usage functions with parameters
+
+
+
+#### v1.1.2 ( 2021. 5. 1 )
 
 - can import SMS, PAPAGO class for more typescrypty usage
 
-#### v1.1.1 ( 2021. 4. 26)
+#### v1.1.1 ( 2021. 4. 26 )
 
 - Readme typing error fixed
 
