@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
 import { NCPAuthKeyType } from '../types/auth_types'
 import { ResponseTranslator, SupportedServices } from '../types/service_translator'
 import { ApiClientResponse, PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType, SearchMessageRequestReturnType, SearchMessageResultReturnType, SendSMSReturnType } from '../types/return_types'
-import { ApiError, ApiErrorEnum, ServiceError } from './errors'
+import { ApiError, ApiErrorEnum, ServiceError } from './errors.util'
 
 
 export class ApiClient {

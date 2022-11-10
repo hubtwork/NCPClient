@@ -1,9 +1,9 @@
 import { Method } from "axios"
 import { NaverOpenApiAuthType } from "../../types/auth_types"
-import { ApiClient, ApiRequest } from "../../utils/api_request"
+import { ApiClient, ApiRequest } from "../../utils/api.util"
 import { PAPAGOlanguages, PAPAGOlanguageSupports, PAPAGO_preprocessed_KoreanNameRomanizer, PAPAGO_preprocessed_LanguageDetction, PAPAGO_preprocessed_Translation } from '../../types/processing_types'
 import { ApiClientResponse, PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType } from "../../types/return_types"
-import { ServiceError } from "../../utils/errors"
+import { ServiceError } from "../../utils/errors.util"
 import { SupportedServices } from "../../types/service_translator"
 
 

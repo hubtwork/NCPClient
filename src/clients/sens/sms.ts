@@ -4,7 +4,7 @@ import { SendSMSParamType } from "../../types/param_types"
 import { SENS_preprocessed_SearchMessageRequest, SENS_preprocessed_SearchMessageResult, SENS_preprocessed_SendSMS } from "../../types/processing_types"
 import { ApiClientResponse, SendSMSReturnType, SearchMessageRequestReturnType, SearchMessageResultReturnType } from "../../types/return_types"
 import { SupportedServices } from "../../types/service_translator"
-import { ApiClient, ApiRequest } from "../../utils/api_request"
+import { ApiClient, ApiRequest } from "../../utils/api.util"
 import { generateApiSignature } from "../../utils/helper"
 
 export class SMS {
