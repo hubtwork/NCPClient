@@ -16,15 +16,14 @@
   "author": "hubtwork",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Hubtwork/NCPClient/issues"
+    "url": "https://github.com/hubtwork/NCPClient/issues"
   },
-  "homepage": "https://github.com/Hubtwork/NCPClient#readme",
+  "homepage": "https://github.com/hubtwork/NCPClient#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.27.2"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.22",
-    "@types/node": "^14.14.37",
+    "@types/jest": "^27.5.1",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.4"
