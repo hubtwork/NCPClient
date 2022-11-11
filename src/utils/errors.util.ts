@@ -1,55 +1,5 @@
 
 
-
-export interface ErrorType {
-    code: string
-    message: string
-}
-
-/**
- * 
- * @param {string} code 
- * @param {string} message 
- * @returns 
- */
-const genError = (code: string, message: string): ErrorType => ({ code: code, message: message })
-
-export const ErrorCode = {
-
-    Common: {
-        // Configuration Errors, Invalid arguments ( 0x )
-        InvalidUrl:         genError('E01', 'Invalid Url'),
-        InvalidRequest:     genError('E02', 'Request configuration is invalid'),
-
-        // Request Errors, generate by response ( 1x )
-        UnexpectedResponse: genError('E11', 'Response with unexpected data format, ask hubtwork@gmail.com.'),
-        NoResponse:         genError('E12', 'No response from server, please check network.'),
-    },
-
-    SENS: {
-
-    }
-
-}
-
-export class ClientError extends Error {
-    private error: ErrorType
-    /**
-     * 
-     * @param error `string` Error cases which can be handled by NCP Client service
-     */
-    constructor(error: ErrorType) {
-        super()
-        this.error = error
-        Object.setPrototypeOf(this, ClientError.prototype)
-    }
-    get(): ErrorType {
-        return this.error
-    }
-}
-
-
-
 /**
  * Enum for API Error represented.
  * Covering from client's error or validation to error for server response
