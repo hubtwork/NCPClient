@@ -43,6 +43,7 @@ export const ErrorDescryptions = {
 
 export class ClientError extends Error {
     private desc: ErrorDescryption
+
     /**
      * 
      * @param desc `string` Error cases which can be handled by NCP Client service
@@ -54,7 +55,13 @@ export class ClientError extends Error {
         // explicitly declare built-in class extension ( Error )
         Object.setPrototypeOf(this, ClientError.prototype)
     }
-    getErrorMessage() {
+    getErrorMessage(): string {
         return `(error)[${this.desc.code}] ${this.desc.message}`
     }
+    /**
+     * 
+     * @param desc error descryption
+     * @returns {ClientError}
+     */
+    static e = (desc: ErrorDescryption): ClientError => new ClientError(desc)
 }
