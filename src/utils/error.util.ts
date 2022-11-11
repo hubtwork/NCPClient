@@ -1,9 +1,5 @@
 
-
-
-
-
-export interface ErrorType {
+export interface ErrorDescryption {
     code: string
     message: string
 }
@@ -14,12 +10,13 @@ export interface ErrorType {
  * @param {string} message 
  * @returns 
  */
-const genError = (code: string, message: string): ErrorType => ({ code: code, message: message })
+const genError = (code: string, message: string): ErrorDescryption => ({ code: code, message: message })
 
 
-export const ErrorCode = {
+export const ErrorDescryptions = {
 
     Client: {
+        UnhandledError:     genError('E00', 'Unhandled client error, ask hubtwork@gmail.com'),
         // Configuration Errors, Invalid arguments ( 0x )
         InvalidUrl:         genError('E01', 'Invalid Url'),
         InvalidRequest:     genError('E02', 'Request configuration is invalid'),
@@ -31,29 +28,33 @@ export const ErrorCode = {
 
     Http: {
         // http status code for services
-        NoContent:          genError('H204', 'Operation success, but no content.'),
-        BadRequest:         genError('H400', 'Bad Request, check your request.'),
-        Unauthorized:       genError('H401', 'Unauthorized access.'),
-        Forbidden:          genError('H403', 'Forbidden, check your authorization.'),
-        NotFound:           genError('H404', 'Endpoint Not Found, check your request.'),
-        TooManyRequests:    genError('H429', 'Too many requests sent, please try in a while.'),
-        InternalError:      genError('H500', 'Server Error, please try in a while.'),
+        NoContent:          genError('204', 'Operation success, but no content.'),
+        BadRequest:         genError('400', 'Bad Request, check your request.'),
+        Unauthorized:       genError('401', 'Unauthorized access.'),
+        Forbidden:          genError('403', 'Forbidden, check your authorization.'),
+        NotFound:           genError('404', 'Endpoint Not Found, check your request.'),
+        TooManyRequests:    genError('429', 'Too many requests sent, please try in a while.'),
+        InternalError:      genError('500', 'Server Error, please try in a while.'),
+
+        UnhandledError:     genError('000', 'Unhandled Http Status Code, ask hubtwork@gmail.com'),
     },
 
-}
+} as const
 
 export class ClientError extends Error {
-    private error: ErrorType
+    private desc: ErrorDescryption
     /**
      * 
-     * @param error `string` Error cases which can be handled by NCP Client service
+     * @param desc `string` Error cases which can be handled by NCP Client service
      */
-    constructor(error: ErrorType) {
+    constructor(desc: ErrorDescryption) {
         super()
-        this.error = error
+        this.desc = desc
+
+        // explicitly declare built-in class extension ( Error )
         Object.setPrototypeOf(this, ClientError.prototype)
     }
-    get(): ErrorType {
-        return this.error
+    getErrorMessage() {
+        return `(error)[${this.desc.code}] ${this.desc.message}`
     }
 }
