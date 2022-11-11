@@ -33,7 +33,6 @@ export interface SendMessageRequest {
     reserveTime?: string
     reserveTimeZone?: string
     scheduleCode?: string
-    
 }
 
 /**
