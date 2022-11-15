@@ -1,4 +1,5 @@
 import { Method } from 'axios'
+import { ErrorDescryption } from './error.model'
 
 /**
  * ApiRequest configs for axios http request
@@ -18,7 +19,6 @@ export interface ApiRequest {
 
 export interface ApiResponse<T> {
     isSuccess: boolean
-    errorCode?: string
-    errorMessage?: string
+    error?: ErrorDescryption
     data?: T
 }

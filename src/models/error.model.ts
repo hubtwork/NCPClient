@@ -41,11 +41,25 @@ export const ErrorDescryptions = {
         NotFound:           genError('404', 'Endpoint Not Found, check your request.'),
         TooManyRequests:    genError('429', 'Too many requests sent, please try in a while.'),
         InternalError:      genError('500', 'Server Error, please try in a while.'),
-
-        UnhandledError:     genError('000', 'Unhandled Http Status Code, ask hubtwork@gmail.com'),
     },
 
+    UnhandledError:     genError('000', 'Unhandled error occurred, ask hubtwork@gmail.com'),
+
 } as const
+
+export const parseHttpError = (httpStatusCode: number): ErrorDescryption => {
+    switch(httpStatusCode) {
+        case 204: return ErrorDescryptions.Http.NoContent
+        case 400: return ErrorDescryptions.Http.BadRequest
+        case 401: return ErrorDescryptions.Http.Unauthorized
+        case 403: return ErrorDescryptions.Http.Forbidden
+        case 404: return ErrorDescryptions.Http.NotFound
+        case 429: return ErrorDescryptions.Http.TooManyRequests
+        case 500: return ErrorDescryptions.Http.InternalError
+        default: return ErrorDescryptions.UnhandledError
+    }
+}
+
 
 export class ClientError extends Error {
     private desc: ErrorDescryption
@@ -54,13 +68,14 @@ export class ClientError extends Error {
      * 
      * @param desc `string` Error cases which can be handled by NCP Client service
      */
-    constructor(desc: ErrorDescryption) {
+    private constructor(desc: ErrorDescryption) {
         super()
         this.desc = desc
 
         // explicitly declare built-in class extension ( Error )
         Object.setPrototypeOf(this, ClientError.prototype)
     }
+    
     public get(): ErrorDescryption { return this.desc }
     /**
      * 

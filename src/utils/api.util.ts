@@ -1,8 +1,7 @@
-import axios, { AxiosInstance, AxiosResponse, Method } from 'axios'
-import { NCPAuthKeyType } from '../types/auth_types'
-import { ResponseTranslator, SupportedServices } from '../types/service_translator'
-import { ApiClientResponse, PapagoDetectLanguageReturnType, PapagoKoreanNameRomanizerReturnType, PapagoTranslationReturnType, SearchMessageRequestReturnType, SearchMessageResultReturnType, SendSMSReturnType } from '../types/return_types'
-import { ApiError, ApiErrorEnum, ServiceError } from './errors.util'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import { ApiError, ApiErrorEnum } from './errors.util'
+import { ApiRequest, ApiResponse } from '../models/api.model'
+import { ClientError, ErrorDescryptions, parseHttpError } from '../models/error.model'
 
 
 export class ApiClient {
@@ -45,22 +44,20 @@ export class ApiClient {
    * @returns {Promise<ApiClientResponse<T>>} return Promise response of wrapped with error handling
    * @memberof ApiClient
    */
-  public async request<T extends object, P extends object>(apiRequest: ApiRequest, serviceError?: ServiceError): Promise<ApiClientResponse<T, P>> {
-    try {
-      if (serviceError) throw serviceError
-      const val = await this.createRequest<T>(apiRequest)
-      const preprocessed = this.preprocessingServerResponse(val, apiRequest) as P
-      return {
-        isSuccess: true,
-        data: val,
-        preprocessed: preprocessed
-      }
-    } catch (error) {
-      return {
-        isSuccess: false,
-        errorMessage: error.message
-      }
-    }
+  public async request<T extends object>(apiRequest: ApiRequest): Promise<ApiResponse<T>> {
+        try {
+            const val = await this.createRequest<T>(apiRequest)
+            return {
+                isSuccess: true,
+                data: val,
+            }
+        } catch (err) {
+            const e: ClientError = (err instanceof ClientError) ? err : ClientError.e(ErrorDescryptions.UnhandledError)
+            return {
+                isSuccess: false,
+                error: e.get(),
+            }
+        }
   }
   /**
    * Execute request and return Promise with error or response if success
@@ -79,6 +76,23 @@ export class ApiClient {
             resolve(response.data as T)
           })
           .catch((error) => {
+            if (axios.isAxiosError(error)) {
+                if (error.response) {
+                    const httpError = parseHttpError(error.response.status)
+                    reject(ClientError.e(httpError))
+                } else if (error.request) {
+                    reject(ClientError.e(ErrorDescryptions.Client.NoResponse))
+                } else {
+                    reject(ClientError.e(ErrorDescryptions.Client.InvalidRequest))
+                }
+            } else if (error instanceof ClientError) {
+                // error when validating url
+                reject(error)
+            } else {
+                // unexpected error
+                reject(ClientError.e(ErrorDescryptions.UnhandledError))
+            }
+
             if (error.response) {
               reject(new ApiError(ApiErrorEnum["httpStatusCode"], error.response.status))
             } else if (error.request) {
@@ -102,12 +116,12 @@ export class ApiClient {
   private urlRequest(apiRequest: ApiRequest) : Promise<AxiosResponse> {
     const { path, method, headers, body } = apiRequest
     // url validation
-    if (!this.validateURL(this.client.defaults.baseURL + apiRequest.path)) throw new ApiError(ApiErrorEnum["invalidURL"])
+    if (!this.validateURL(this.client.defaults.baseURL + apiRequest.path)) throw ClientError.e(ErrorDescryptions.Client.InvalidUrl)
     return this.client.request({
       url: path,
       method: method,
       headers: headers,
-      data: body
+      data: body,
     })
   }
   
@@ -122,44 +136,4 @@ export class ApiClient {
     var res = url.match(/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/)
     return (res !== null)
   }
-
-  private preprocessingServerResponse(val: object, apiRequest: ApiRequest) {
-    switch(apiRequest.service) {
-      // SMS
-      case SupportedServices.SENS_SEND_SMS:
-        return ResponseTranslator.sensSendSMS(val as SendSMSReturnType)
-      case SupportedServices.SENS_SEARCH_MESSAGE_REQUEST:
-        return ResponseTranslator.sensSearchMessageRequest(val as SearchMessageRequestReturnType)
-      case SupportedServices.SENS_SEARCH_MESSAGE_RESULT:
-        return ResponseTranslator.sensSearchMessageResult(val as SearchMessageResultReturnType)
-      // PAPAGO
-      case SupportedServices.PAPAGO_TRANSLATION:
-        return ResponseTranslator.papagoTranslation(val as PapagoTranslationReturnType)
-      case SupportedServices.PAPAGO_LANGUAGE_DETECTION:
-        return ResponseTranslator.papagoLanguageDetection(val as PapagoDetectLanguageReturnType)
-      case SupportedServices.PAPAGO_KOREAN_NAME_ROMANIZER:
-        return ResponseTranslator.papagoKoreanNameRomanizer(val as PapagoKoreanNameRomanizerReturnType)
-      default : 
-        return {}
-    }
-  }
 }
-
-/**
- * ApiRequest configs for http request
- * 
- * @interface ApiRequest 
- * @member {string} path URI path for current request
- * @member {Method} member Http Method for current request
- * @member {{[key:string]: string}} headers Header for current request
- * @member {({[key:string]: any} | undefined)} body Body for current request
- */
-export interface ApiRequest {
-  path:     string
-  method:   Method
-  headers: { [key: string]: string }
-  body?:     { [key: string]: any }
-
-  service?: SupportedServices
-}
-
