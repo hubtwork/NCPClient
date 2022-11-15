@@ -1,6 +1,6 @@
 import { Method } from "axios"
 import { AuthKey, SmsServiceAuth } from "../../models/auth.model"
-import { Message, MMS_File, SendMessageRequest } from "../../models/sms.model"
+import { LookupMessageResponse, LookupReservedMessageResponse, LookupResultResponse, Message, MMS_File, SendMessageRequest, SendMessageResponse } from "../../models/sms.model"
 import { BaseUrl } from "../../shared/baseurl.shared"
 import { ApiPath } from "../../shared/path.shared"
 import { NCPAuthKeyType, SMSserviceAuthType } from "../../types/auth_types"
@@ -9,7 +9,7 @@ import { SENS_preprocessed_SearchMessageRequest, SENS_preprocessed_SearchMessage
 import { ApiClientResponse, SendSMSReturnType, SearchMessageRequestReturnType, SearchMessageResultReturnType } from "../../types/return_types"
 import { SupportedServices } from "../../types/service_translator"
 import { ApiClient, ApiRequest } from "../../utils/api.util"
-import { generateApiSignature } from "../../utils/helper"
+import { generateApiSignature } from "../../utils/helper.util"
 
 export class SMS {
     /**
@@ -56,114 +56,75 @@ export class SMS {
         this.requestFactory.setAuth(authKey, smsAuth)
     }
 
-    /**
-     * Construct SendSMS Service apiRequest. Generate signature for signing, pass SendSMSParams to body.
-     * Single / Multiple send mode supported.
-     * @async
-     * @access public
-     * @param {(SendSMSParamType | SendSMSParamType[])} apiRequest - Message-reference Data with ( to, content ). Single / Multi value passing supported.
-     * @param {(number | undefined)} countryCode - CountryCode for recipient. ( default : 82 )
-     * @returns {Promise<ApiClientResponse<SendSMSReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
-     * @memberof SMS
-     */
-    public async sendSMS(smsParam: SendSMSParamType | SendSMSParamType[], countryCode?: number): Promise<ApiClientResponse<SendSMSReturnType, SENS_preprocessed_SendSMS>> {
-        // construct path and method
-        const path = `/sms/v2/services/${this.smsAuth.serviceId}/messages`
-        const method: Method = 'POST'
-        // construct signature and headers
-        const { timestamp, signature } = generateApiSignature({ method: method, url: path, ncpAuthKey: this.ncpAuthKey })
-        const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'x-ncp-iam-access-key': this.ncpAuthKey.accessKey,
-        'x-ncp-apigw-timestamp': timestamp,
-        'x-ncp-apigw-signature-v2': signature,
-        }
-        // construct message parameters and body
-        countryCode = (countryCode === undefined) ? 82 : countryCode
-        smsParam = (smsParam instanceof Array) ? smsParam : [smsParam]
-        const body = {
-        'type': 'SMS',
-        'contentType': 'COMM',
-        'countryCode': `${countryCode}`,
-        'from': this.smsAuth.phone,
-        'content': ' ',
-        'messages': smsParam
-        }
-        const apiRequest: ApiRequest = {
-        path: path,
-        method: method,
-        headers: headers,
-        body: body,
-
-        service: SupportedServices.SENS_SEND_SMS
-        }
-        return this.client.request<SendSMSReturnType, SENS_preprocessed_SendSMS>(apiRequest)
+    // COMMON Messages
+    public async sendSMS(to: string|string[], content: string, isAd: boolean = false): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.SendMessage(MessageType.SMS, contentType, to, content)
+        return this.client.request<SendMessageResponse>(apiRequest)
     }
-
-    /**
-     * Construct searchMessageRequest Service apiRequest. Generate signature for signing, pass requestId for search.
-     * return the requestData for given requestId. It also returns messages info refer to the request.
-     * @async
-     * @access public
-     * @param {string} requestId - requestId which get from response of sendSMS API
-     * @returns {Promise<ApiClientResponse<SearchMessageRequestReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
-     * @memberof SMS
-     */
-    public async searchMessageRequest(requestId: string): Promise<ApiClientResponse<SearchMessageRequestReturnType, SENS_preprocessed_SearchMessageRequest>> {
-        // construct path and method
-        const path = `/sms/v2/services/${this.smsAuth.serviceId}/messages?requestId=${requestId}`
-        const method: Method = 'GET'
-        // construct signature and headers
-        const { timestamp, signature } = generateApiSignature({ method: method, url: path, ncpAuthKey: this.ncpAuthKey })
-        const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'x-ncp-iam-access-key': this.ncpAuthKey.accessKey,
-        'x-ncp-apigw-timestamp': timestamp,
-        'x-ncp-apigw-signature-v2': signature,
-        }
-        const apiRequest: ApiRequest = {
-        path: path,
-        method: method,
-        headers: headers,
-
-        service: SupportedServices.SENS_SEARCH_MESSAGE_REQUEST
-        }
-        return this.client.request<SearchMessageRequestReturnType, SENS_preprocessed_SearchMessageRequest>(apiRequest)
+    public async sendLMS(to: string|string[], subject: string, content: string, isAd: boolean = false): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.SendMessage(MessageType.LMS, contentType, to, content, subject)
+        return this.client.request<SendMessageResponse>(apiRequest)
     }
-
-    /**
-     * Construct searchMessageResult Service apiRequest. Generate signature for signing, pass requestId for search.
-     * return the requestData for given messageId. It also returns messages info refer to the message.
-     * It's response data is more detail than searchMessageResult with completeTime, statuses, telcoCode, etc.
-     * @async
-     * @access public
-     * @param {string} messageId - messageId which get from response of searchMessageRequest API
-     * @returns {Promise<ApiClientResponse<SearchMessageRequestReturnType>>} return Promise response of http request with current ApiRequest configs and handle errors
-     * @memberof SMS
-     */
-    public async searchMessageResult(messageId: string): Promise<ApiClientResponse<SearchMessageResultReturnType, SENS_preprocessed_SearchMessageResult>> {
-        // construct path and method
-        const path = `/sms/v2/services/${this.smsAuth.serviceId}/messages/${messageId}`
-        const method: Method = 'GET'
-        // construct signature and headers
-        const { timestamp, signature } = generateApiSignature({ method: method, url: path, ncpAuthKey: this.ncpAuthKey })
-        const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'x-ncp-iam-access-key': this.ncpAuthKey.accessKey,
-        'x-ncp-apigw-timestamp': timestamp,
-        'x-ncp-apigw-signature-v2': signature,
-        }
-        const apiRequest: ApiRequest = {
-        path: path,
-        method: method,
-        headers: headers,
-
-        service: SupportedServices.SENS_SEARCH_MESSAGE_RESULT
-        }
-        return this.client.request<SearchMessageResultReturnType, SENS_preprocessed_SearchMessageResult>(apiRequest)
+    public async sendMMS(to: string|string[], subject: string, content: string, isAd: boolean = false, files?: MMS_File[]): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.SendMessage(MessageType.MMS, contentType, to, content, subject, files)
+        return this.client.request<SendMessageResponse>(apiRequest)
     }
-
-  
+    // Reserve Message
+    public async reserveSMS(to: string|string[], content: string, reserveTime: string, isAd: boolean = false): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.ReserveMessage(MessageType.SMS, contentType, to, content, reserveTime)
+        return this.client.request<SendMessageResponse>(apiRequest)
+    }
+    public async reserveLMS(to: string|string[], subject: string, content: string, reserveTime: string, isAd: boolean = false): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.ReserveMessage(MessageType.LMS, contentType, to, content, reserveTime, subject)
+        return this.client.request<SendMessageResponse>(apiRequest)
+    }
+    public async reserveMMS(to: string|string[], subject: string, content: string, reserveTime: string, isAd: boolean = false, files?: MMS_File[]): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.ReserveMessage(MessageType.MMS, contentType, to, content, reserveTime, subject, files)
+        return this.client.request<SendMessageResponse>(apiRequest)
+    }
+    // Schedule Message
+    public async scheduleSMS(to: string|string[], content: string, scheduleCode: string, isAd: boolean = false): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.ScheduleMessage(MessageType.SMS, contentType, to, content, scheduleCode)
+        return this.client.request<SendMessageResponse>(apiRequest)
+    }
+    public async scheduleLMS(to: string|string[], subject: string, content: string, scheduleCode: string, isAd: boolean = false): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.ScheduleMessage(MessageType.LMS, contentType, to, content, scheduleCode, subject)
+        return this.client.request<SendMessageResponse>(apiRequest)
+    }
+    public async scheduleMMS(to: string|string[], subject: string, content: string, scheduleCode: string, isAd: boolean = false, files?: MMS_File[]): Promise<ApiResponse<SendMessageResponse>> {
+        const contentType = (isAd) ? ContentType.ADVERTISE : ContentType.COMMON
+        const apiRequest = this.requestFactory.ScheduleMessage(MessageType.MMS, contentType, to, content, scheduleCode, subject, files)
+        return this.client.request<SendMessageResponse>(apiRequest)
+    }
+    // Lookup Methods
+    public async lookupMessageRequest(requestId: string): Promise<ApiResponse<LookupMessageResponse>> {
+        const apiRequest = this.requestFactory.LookupMessageRequest(requestId)
+        return this.client.request<LookupMessageResponse>(apiRequest)
+    }
+    public async lookupMessageResult(messageId: string): Promise<ApiResponse<LookupResultResponse>> {
+        const apiRequest = this.requestFactory.LookupMessageResult(messageId)
+        return this.client.request<LookupResultResponse>(apiRequest)
+    }
+    public async lookupReservedMessage(reserveId: string): Promise<ApiResponse<LookupReservedMessageResponse>> {
+        const apiRequest = this.requestFactory.LookupReservedMessage(reserveId)
+        return this.client.request<LookupReservedMessageResponse>(apiRequest)
+    }
+    public async cancelReservedMessage(reserveId: string): Promise<ApiResponse<null>> {
+        const apiRequest = this.requestFactory.CancelReservedMessage(reserveId)
+        return this.client.request<null>(apiRequest)
+    }
+    public async cancelScheduledMessage(scheduleCode: string, messageId: string): Promise<ApiResponse<null>> {
+        const apiRequest = this.requestFactory.CancelScheduledMessage(scheduleCode, messageId)
+        return this.client.request<null>(apiRequest)
+    }
 }
 
 

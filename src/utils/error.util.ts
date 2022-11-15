@@ -2,6 +2,8 @@
 export interface ErrorDescryption {
     code: string
     message: string
+
+    debug(): string
 }
 
 /**
@@ -10,7 +12,11 @@ export interface ErrorDescryption {
  * @param {string} message 
  * @returns 
  */
-const genError = (code: string, message: string): ErrorDescryption => ({ code: code, message: message })
+const genError = (code: string, message: string): ErrorDescryption => ({ 
+    code: code,
+    message: message,
+    debug() { return `(error)[${code}] ${message}` }
+})
 
 
 export const ErrorDescryptions = {
@@ -55,9 +61,7 @@ export class ClientError extends Error {
         // explicitly declare built-in class extension ( Error )
         Object.setPrototypeOf(this, ClientError.prototype)
     }
-    getErrorMessage(): string {
-        return `(error)[${this.desc.code}] ${this.desc.message}`
-    }
+    public get(): ErrorDescryption { return this.desc }
     /**
      * 
      * @param desc error descryption

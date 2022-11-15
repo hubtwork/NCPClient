@@ -1,7 +1,6 @@
 import { Method } from 'axios';
 import crypto from 'crypto'
-import { AuthKey } from '../models/auth.model';
-import { ApiSignatureParamType, ApiSignatureReturnType } from '../types/auth_types';
+import { AuthKey, AuthParams } from '../models/auth.model';
 
 /**
  * generateApiSignature
@@ -21,7 +20,7 @@ export function generateApiSignature(
   method: Method,
   url: string,
   authKey: AuthKey
-): ApiSignatureReturnType {
+): AuthParams {
     const { accessKey, secretKey } = authKey  // from portal
     const signParams: string[] = []
     const space = ' '				// one space
