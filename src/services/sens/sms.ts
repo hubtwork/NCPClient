@@ -326,27 +326,3 @@ export class SMS {
         }
     }
 }
-
-/**
- * `Message Type` for each message's style
- * 
- * SMS, LMS, MMS currently supported - last checked : 2022.05.25
- * 
- * @enum `MessageType`
- */
- enum MessageType {
-    SMS = 'SMS',
-    LMS = 'LMS',
-    MMS = 'MMS',
-}
-/**
- * `Content Type` for each message's style
- * 
- * COMMON, ADVERTISE currently supported - last checked : 2022.05.25
- * 
- * @enum `Content Type`
- */
-enum ContentType {
-    COMMON = 'COMM',
-    ADVERTISE = 'AD',
-}
