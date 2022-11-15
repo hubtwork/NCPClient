@@ -1,5 +1,5 @@
-
-
+import { ApiResponse } from "../models/api.model"
+import { ContentType, LookupMessageResponse, LookupReservedMessageResponse, LookupResultResponse, MessageType, MMS_File, SendMessageResponse } from "../models/sms.model"
 
 interface SmsRepository {
     /**
@@ -46,4 +46,40 @@ interface SmsRepository {
         to: string|string[], content: string, scheduleCode: string,
         subject?: string, files?: MMS_File[], 
     ): Promise<ApiResponse<SendMessageResponse>>
+    /**
+     * 
+     * @param requestId 
+     */
+    lookupMessageRequest(
+        requestId: string
+    ): Promise<ApiResponse<LookupMessageResponse>>
+    /**
+     * 
+     * @param messageId 
+     */
+    lookupMessageResult(
+        messageId: string
+    ): Promise<ApiResponse<LookupResultResponse>>
+    /**
+     * 
+     * @param reserveId 
+     */
+    lookupReservedMessage(
+        reserveId: string
+    ): Promise<ApiResponse<LookupReservedMessageResponse>>
+    /**
+     * 
+     * @param reserveId 
+     */
+    cancelReservedMessage(
+        reserveId: string
+    ): Promise<ApiResponse<null>>
+    /**
+     * 
+     * @param scheduleCode 
+     * @param messageId 
+     */
+    cancelScheduledMessage(
+        scheduleCode: string, messageId: string
+    ): Promise<ApiResponse<null>>
 }

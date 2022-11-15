@@ -6,21 +6,23 @@
  * SMS, LMS, MMS currently supported - last checked : 2022.11.16
  * 
  */
-export const MessageType = {
+export const MessageTypes = {
     SMS: 'SMS',
     LMS: 'LMS',
     MMS: 'MMS',
 } as const
+export type MessageType = 'SMS' | 'LMS' | 'MMS'
 /**
  * `Content Type` for each message's style
  * 
  * COMMON, ADVERTISE currently supported - last checked : 2022.11.16
  * 
  */
-export const ContentType = {
+export const ContentTypes = {
     COMMON: 'COMM',
     ADVERTISE: 'AD',
 } as const
+export type ContentType = 'COMM' | 'AD'
 /**
  * Base message type for send messaging
  */
