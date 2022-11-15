@@ -1,4 +1,4 @@
-import { BaseURL } from "../../shared/baseurl"
+import { BaseURL } from "../../shared/baseurl.shared"
 import { NaverOpenApiAuthType } from "../../types/auth_types"
 import { PAPAGO } from "./papago"
 

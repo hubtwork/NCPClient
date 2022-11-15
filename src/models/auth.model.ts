@@ -15,7 +15,7 @@
      * @returns 
      * Naver Cloud Platform API account authentication
      */
-    API: (accessKey: string, secretKey: string): ApiAuthKey => ({ accessKey, secretKey }),
+    API: (accessKey: string, secretKey: string): AuthKey => ({ accessKey, secretKey }),
     // Service Scope
     /**
      * 
@@ -24,24 +24,37 @@
      * @returns 
      * SMS Service param authentication
      */
-    SMS: (phone: string, serviceId: string): SMSserviceAuth => ({ phone, serviceId }),
+    SMS: (phone: string, serviceId: string): SmsServiceAuth => ({ phone, serviceId }),
 }
 
 
 // -- API Scope
 /**
- * `Authentication` for Naver Cloud Platform API
+ * `AuthKey` for Naver Cloud Platform API
+ * read in (https://api.ncloud-docs.com/docs/common-ncpapi)
  * 
- * @name ApiAuthKey
+ * @name AuthKey
  * @member accessKey `string` private access key for account
  * @member secretKey `string` private secret key for account
  */
- export type ApiAuthKey = {
+ export interface AuthKey {
     accessKey: string
     secretKey: string
 }
+/**
+ * `AuthParams` in header for Naver Cloud Platform APIs.
+ * read in (https://api.ncloud-docs.com/docs/common-ncpapi)
+ * 
+ * @name AuthParams
+ * @member timestamp `string` x-ncp-apigw-timestamp
+ * @member signature `string` x-ncp-apigw-signature-v2
+ */
+export interface AuthParams {
+    timestamp: string
+    signature: string
+}
 
-// -- Service Scope
+
 /**
  * `Authentication` for SMS Service
  * 
@@ -49,20 +62,19 @@
  * @member phone `string` registered phone number for sms service
  * @member serviceId `string` service id for sms service
  */
-export type SMSserviceAuth = {
+export interface SmsServiceAuth {
     phone: string
     serviceId: string
 }
 
-// -- API Signature Scope
 /**
- * `API Signature` for Naver Cloud Platform Services.
+ * `Authentication` for Naver Open API
  * 
- * @name ApiSignature
- * @member timestamp `string` timestamp
- * @member signature `string` encrypted signature
+ * @name NaverOpenApiAuth
+ * @member clientId `string` client id for naver open api
+ * @member clientSecret `string` secret key for naver open api
  */
-export type ApiSignature = {
-    timestamp: string
-    signature: string
+export interface NaverOpenApiAuth {
+    clientId: string
+    clientSecret: string
 }

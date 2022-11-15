@@ -1,4 +1,6 @@
+import { Method } from 'axios';
 import crypto from 'crypto'
+import { AuthKey } from '../models/auth.model';
 import { ApiSignatureParamType, ApiSignatureReturnType } from '../types/auth_types';
 
 /**
@@ -8,25 +10,25 @@ import { ApiSignatureParamType, ApiSignatureReturnType } from '../types/auth_typ
  *  
  * @param {string} method - NCP API service method
  * @param {string} url - NCP API service url ( include query string )
- * @param {NCPAuthKeyType} ncpAuthKey - NCP Account access key & secret key ( from portal or Sub Account )
+ * @param {AuthKey} authKey - NCP Account access key & secret key ( from portal or Sub Account )
  * 
  * @return {ApiSignatureReturnType}
  *         Caculated api signature for NCP services 
  *         Format : { Current_timestamp, Caculated_signature }
  */
 
-export function generateApiSignature({
-  method,
-  url,
-  ncpAuthKey
-}: ApiSignatureParamType): ApiSignatureReturnType {
-  const { accessKey, secretKey } = ncpAuthKey
-  const signParams: string[] = []
-  const space = ' '				// one space
+export function generateApiSignature(
+  method: Method,
+  url: string,
+  authKey: AuthKey
+): ApiSignatureReturnType {
+    const { accessKey, secretKey } = authKey  // from portal
+    const signParams: string[] = []
+    const space = ' '				// one space
 	const newLine = '\n'				// new line
 	var timestamp = Date.now().toString()			// current timestamp (epoch)
 
-  var hmac = crypto.createHmac('sha256', secretKey)
+    var hmac = crypto.createHmac('sha256', secretKey)
   
 	signParams.push(method);
 	signParams.push(space);
@@ -34,12 +36,12 @@ export function generateApiSignature({
 	signParams.push(newLine);
 	signParams.push(timestamp);
 	signParams.push(newLine);
-  signParams.push(accessKey);
+    signParams.push(accessKey);
 
-  const signature: string = hmac.update(signParams.join('')).digest('base64')
-  
-  return {
-    timestamp,
-    signature
-  }
+    const signature: string = hmac.update(signParams.join('')).digest('base64')
+    
+    return {
+        timestamp,
+        signature
+    }
 }
