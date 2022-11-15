@@ -1,5 +1,4 @@
 import { AuthKey, SmsServiceAuth } from '../../models/auth.model'
-import { BaseURL } from '../../shared/baseurl.shared'
 import { SMS } from './sms'
 
 export class SENS {

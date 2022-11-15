@@ -44,7 +44,7 @@ export class ApiClient {
    * @returns {Promise<ApiClientResponse<T>>} return Promise response of wrapped with error handling
    * @memberof ApiClient
    */
-  public async request<T extends object>(apiRequest: ApiRequest): Promise<ApiResponse<T>> {
+  public async request<T extends object | null>(apiRequest: ApiRequest): Promise<ApiResponse<T>> {
         try {
             const val = await this.createRequest<T>(apiRequest)
             return {

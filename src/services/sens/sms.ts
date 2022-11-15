@@ -1,14 +1,10 @@
 import { Method } from "axios"
+import { ApiRequest, ApiResponse } from "../../models/api.model"
 import { AuthKey, SmsServiceAuth } from "../../models/auth.model"
 import { LookupMessageResponse, LookupReservedMessageResponse, LookupResultResponse, Message, MMS_File, SendMessageRequest, SendMessageResponse } from "../../models/sms.model"
 import { BaseUrl } from "../../shared/baseurl.shared"
 import { ApiPath } from "../../shared/path.shared"
-import { NCPAuthKeyType, SMSserviceAuthType } from "../../types/auth_types"
-import { SendSMSParamType } from "../../types/param_types"
-import { SENS_preprocessed_SearchMessageRequest, SENS_preprocessed_SearchMessageResult, SENS_preprocessed_SendSMS } from "../../types/processing_types"
-import { ApiClientResponse, SendSMSReturnType, SearchMessageRequestReturnType, SearchMessageResultReturnType } from "../../types/return_types"
-import { SupportedServices } from "../../types/service_translator"
-import { ApiClient, ApiRequest } from "../../utils/api.util"
+import { ApiClient } from "../../utils/api.util"
 import { generateApiSignature } from "../../utils/helper.util"
 
 export class SMS {
