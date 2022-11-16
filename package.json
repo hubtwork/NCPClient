@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "prebuild": "rm -rf dist",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "sample": "ts-node sample_app/app.ts"
   },
   "repository": {

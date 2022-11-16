@@ -1,7 +1,7 @@
 import { ApiResponse } from "../models/api.model"
 import { ContentType, LookupMessageResponse, LookupReservedMessageResponse, LookupResultResponse, MessageType, MMS_File, SendMessageResponse } from "../models/sms.model"
 
-interface SmsRepository {
+export interface SmsRepository {
     /**
      * 
      * @param type 
