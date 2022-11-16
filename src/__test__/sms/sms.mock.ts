@@ -1,8 +1,8 @@
 import { ApiResponse } from '../../models/api.model';
 import { MessageType, ContentType, MMS_File, SendMessageResponse, LookupMessageResponse, LookupResultResponse, LookupReservedMessageResponse } from '../../models/sms.model';
-import { SmsRepository } from '../../repository/sms.repository';
+import { SmsRepository } from '../../repository/sms.interface';
 
-export class SmsTestRepository implements SmsRepository {
+export class TestSmsRepository implements SmsRepository {
     sendMessage(type: MessageType, contentType: ContentType, to: string | string[], content: string, subject?: string | undefined, files?: MMS_File[] | undefined): Promise<ApiResponse<SendMessageResponse>> {
         throw new Error('Method not implemented.');
     }

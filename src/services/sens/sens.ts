@@ -1,5 +1,5 @@
 import { AuthKey, SmsServiceAuth } from '../../models/auth.model'
-import { SMS } from './sms'
+import { SMS } from './sms/sms'
 
 export class SENS {
 

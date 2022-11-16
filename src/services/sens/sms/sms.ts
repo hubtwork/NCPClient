@@ -1,11 +1,12 @@
-import { Method } from "axios"
-import { ApiRequest, ApiResponse } from "../../models/api.model"
-import { AuthKey, SmsServiceAuth } from "../../models/auth.model"
-import { LookupMessageResponse, LookupReservedMessageResponse, LookupResultResponse, Message, MMS_File, SendMessageRequest, SendMessageResponse } from "../../models/sms.model"
-import { BaseUrl } from "../../shared/baseurl.shared"
-import { ApiPath } from "../../shared/path.shared"
-import { ApiClient } from "../../utils/api.util"
-import { generateApiSignature } from "../../utils/helper.util"
+import axios, { Method } from "axios"
+import { ApiRequest, ApiResponse } from "../../../models/api.model"
+import { AuthKey, SmsServiceAuth } from "../../../models/auth.model"
+import { ContentType, LookupMessageResponse, LookupReservedMessageResponse, LookupResultResponse, Message, MessageType, MMS_File, SendMessageRequest, SendMessageResponse } from "../../../models/sms.model"
+import { SmsRepository } from "../../../repository/sms.interface"
+import { BaseUrl } from "../../../shared/baseurl.shared"
+import { ApiPath } from "../../../shared/path.shared"
+import { ApiClient } from "../../../utils/api.util"
+import { generateApiSignature } from "../../../utils/helper.util"
 
 export class SMS {
     /**
@@ -122,7 +123,6 @@ export class SMS {
         return this.client.request<null>(apiRequest)
     }
 }
-
 
 /**
  * `Request Factory` for building SMS api request
